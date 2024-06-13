@@ -1,0 +1,14 @@
+[tool.poetry]
+package-mode = false
+version = "0.1.0"
+description = "MLOps project"
+authors = ["Palandr123 <palandr545@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
