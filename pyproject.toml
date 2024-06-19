@@ -1,5 +1,6 @@
 [tool.poetry]
 package-mode = false
+name = "MLOps-Project"
 version = "0.1.0"
 description = "MLOps project"
 authors = ["Palandr123 <palandr545@gmail.com>"]
@@ -7,6 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+dvc = "^3.51.2"
 
 
 [build-system]
