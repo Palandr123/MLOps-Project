@@ -1,5 +1,4 @@
 [tool.poetry]
-package-mode = false
 name = "MLOps-Project"
 version = "0.1.0"
 description = "MLOps project"
@@ -16,6 +15,8 @@ matplotlib = "^3.9.0"
 seaborn = "^0.13.2"
 scikit-learn = "^1.5.0"
 category-encoders = "^2.6.3"
+hydra-core = "^1.3.2"
+kaggle = "^1.6.14"
 
 
 [tool.poetry.group.dev.dependencies]
