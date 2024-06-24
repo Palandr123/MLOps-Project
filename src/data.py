@@ -1,9 +1,9 @@
 import os
 from subprocess import run
 from pathlib import Path
+from zipfile import ZipFile
 
 from hydra import compose, initialize
-from omegaconf import DictConfig
 import pandas as pd
 
 
@@ -21,6 +21,8 @@ def download_data(user_name: str, dataset_name: str, save_path: str | Path):
     if not data_path.exists():
         run(
             [
+                "poetry",
+                "run",
                 "kaggle",
                 "datasets",
                 "download",
@@ -28,7 +30,13 @@ def download_data(user_name: str, dataset_name: str, save_path: str | Path):
             ],
             check=True,
         )
-        os.rename(Path(f"{dataset_name}.csv"), data_path)
+        with ZipFile(f"{dataset_name}.zip", 'r') as zip_file:
+            # Assuming there's only one CSV file in the archive
+            csv_file = zip_file.namelist()[0]
+            zip_file.extract(csv_file, data_path.parent)
+            (data_path.parent / csv_file).rename(data_path)
+        os.remove(Path(f"{dataset_name}.zip"))
+
     else:
         print(f"Data already exists: {data_path}")
 
@@ -45,20 +53,20 @@ def sample_data() -> pd.DataFrame:
     cfg = compose(config_name="sample_data")
 
     # Download data if not present
-    download_data(cfg.user_name, cfg.dataset_name, cfg.save_path, cfg.token_file)
+    download_data(cfg.user_name, cfg.dataset_name, cfg.save_path)
 
     # Read and sort data
     data = pd.read_csv(cfg.save_path)
     data = data.sort_values(by="posting_date")
 
     # Sample data
-    if not 0 <= cfg.sample_num * int(cfg.sample_size * len(data)) <= len(data):
+    if not 0 <= (cfg.sample_num - 1) * int(cfg.sample_size * len(data)) <= len(data):
         raise ValueError(
             "Make sure the the sample number and size lie in the range of dataset rows"
         )
     sample = data.iloc[
-        cfg.sample_num
-        * int(cfg.sample_size * len(data)) : (cfg.sample_num + 1)
+        (cfg.sample_num - 1)
+        * int(cfg.sample_size * len(data)) : cfg.sample_num
         * int(cfg.sample_size * len(data))
     ]
 
