@@ -49,7 +49,7 @@ def sample_data() -> pd.DataFrame:
         pd.DataFrame: The sampled data as a pandas DataFrame.
     """
     # Initialize Hydra with config path (replace with your config file)
-    initialize(config_path="../configs")
+    initialize(config_path="../configs", version_base="1.1")
     cfg = compose(config_name="sample_data")
 
     # Download data if not present
