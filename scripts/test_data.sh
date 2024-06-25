@@ -14,3 +14,4 @@ done
 
 # Cleanup
 mv configs/sample_data.yaml.bkp configs/sample_data.yaml
+python src/data.py > /dev/null
