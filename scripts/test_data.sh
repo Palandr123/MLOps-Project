@@ -10,6 +10,20 @@ do
     # Modify config
     sed -i "s/sample_num.*/sample_num: $i/" configs/sample_data.yaml
     python src/data.py
+
+    if [ $? -eq 0 ]
+    then
+        echo "Validation succeeded. Saving a new version of data"
+        dvc add data/samples/sample.csv
+        git add data/samples/sample.csv.dvc
+        git commit -m "Added batch $i"
+        git push
+        git tag -f -a "v1.0.$i" -m "Added batch $i"
+        git push -f --tags
+        dvc push
+    else
+        echo "Validation failed"
+    fi
 done
 
 # Cleanup
