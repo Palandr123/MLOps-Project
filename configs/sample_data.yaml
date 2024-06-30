@@ -2,4 +2,4 @@ user_name: austinreese
 dataset_name: craigslist-carstrucks-data
 save_path: data/raw/vehicles.csv
 sample_size: 0.2
-sample_num: 1
+sample_num: 5
