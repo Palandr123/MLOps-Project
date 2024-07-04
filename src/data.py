@@ -358,7 +358,103 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
         pd.DataFrame: validated features
         pd.DataFrame: validated target feature
     """
-    pass
+    context = gx.get_context()
+    ds_x = context.sources.add_or_update_pandas(name = "transformed_data")
+    da_x = ds_x.add_dataframe_asset(name = "pandas_dataframe")
+    batch_request_x = da_x.build_batch_request(dataframe = X)
+
+    # Create expectations suite
+    context.add_or_update_expectation_suite('transformed_data_expectation')
+    
+    # Create validator for X
+    validator_x = context.get_validator(
+        batch_request=batch_request_x,
+        expectation_suite_name='transformed_data_expectation',
+    )
+
+    min_max_scale_cols = ['region', 'year', 'model', 'title_status', 'state', 'manufacturer']
+    # Assume all columns scaled with min max in 0-1 range
+    for col in min_max_scale_cols:
+        validator_x.expect_column_values_to_be_between(
+            column=col,
+            min_value=0,
+            max_value=1,
+        )
+
+    ohe_cols = ['fuel_gas', 'fuel_diesel', 'fuel_other', 'fuel_electric',
+                'fuel_hybrid', 'transmission_automatic', 'transmission_manual','transmission_other']
+    # Assume all ohe-transformed cols are 0 or 1
+    for col in ohe_cols:
+        validator_x.expect_column_values_to_be_in_set(
+            column=col,
+            value_set=[0, 1]
+        )
+    
+    periodic_cols = ['lat_sin', 'lat_cos', 'long_sin',
+                    'long_cos', 'posting_date_month_sin', 'posting_date_month_cos',
+                    'posting_date_day_sin', 'posting_date_day_cos']
+    # Assume all periodic-transformed in range (-1; 1)
+    for col in periodic_cols:
+        validator_x.expect_column_values_to_be_between(
+            column=col,
+            min_value=-1,
+            max_value=1,
+        )
+    
+    # Assume odometer is not null
+    validator_x.expect_column_values_to_not_be_null(
+        column='odometer'
+    )
+
+    # Store expectation suite
+    validator_x.save_expectation_suite(
+        discard_failed_expectations = False
+    )
+    
+    # Create checkpoint
+    checkpoint_x = context.add_or_update_checkpoint(
+        name="checkpoint_x",
+        validator=validator_x,
+    )
+    
+    # Run validation
+    checkpoint_result_x = checkpoint_x.run()
+
+
+    ds_y = context.sources.add_or_update_pandas(name = "transformed_target")
+    da_x = ds_y.add_dataframe_asset(name = "pandas_dataframe")
+    batch_request_y = da_x.build_batch_request(dataframe = y)
+    # Create expectations suite
+    context.add_or_update_expectation_suite('transformed_target_expectation')
+
+    validator_y = context.get_validator(
+        batch_request=batch_request_y,
+        expectation_suite_name='transformed_target_expectation',
+    )
+    # Assume price between 1000 and 40000
+    validator_y.expect_column_values_to_be_between(
+        column='price',
+        min_value=1000,
+        max_value=40000,
+    )
+    
+    # Store expectation suite
+    validator_y.save_expectation_suite(
+        discard_failed_expectations = False
+    )
+    
+    # Create checkpoint
+    checkpoint_y = context.add_or_update_checkpoint(
+        name="checkpoint_y",
+        validator=validator_y,
+    )
+    
+    # Run validation
+    checkpoint_result_y = checkpoint_y.run()
+
+    if checkpoint_result_x.success and checkpoint_result_y.success:
+        return X, y
+    
 
 if __name__ == "__main__":
     sample_data()
