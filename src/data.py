@@ -12,6 +12,7 @@ from great_expectations.data_context import FileDataContext
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler, StandardScaler, LabelEncoder
 from category_encoders.one_hot import OneHotEncoder
+import zenml
 
 def download_data(user_name: str, dataset_name: str, save_path: str | Path):
     """
@@ -454,7 +455,12 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
 
     if checkpoint_result_x.success and checkpoint_result_y.success:
         return X, y
-    
+
+def load_features(X: pd.DataFrame, y: pd.DataFrame, ver: str):
+    zenml.save_artifact(data = X, name = "features", tags = [ver])
+    zenml.save_artifact(data = y, name = "target", tags = [ver])
+
+
 
 if __name__ == "__main__":
     sample_data()
