@@ -3,7 +3,7 @@ import os
 
 from airflow import DAG
 from airflow import AirflowException
-from airflow.decorators import task, dag
+from airflow.decorators import dag
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 
