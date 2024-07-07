@@ -6,7 +6,7 @@ import pytest
 from src.data import sample_data
 
 
-EXPECTED_SAMPLE_SIZE = 85376
+EXPECTED_SAMPLE_SIZE = len(pd.read_csv("data/samples/sample.csv"))
 
 
 @patch('src.data.download_data')
