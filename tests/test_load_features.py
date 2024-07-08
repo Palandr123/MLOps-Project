@@ -46,15 +46,15 @@ class TestLoadFeatures(unittest.TestCase):
         args_list = mock_save_artifact.call_args_list
 
         # Extract data arguments from mock calls
-        call_X_data = args_list[0][1]['data']
-        call_y_data = args_list[1][1]['data']
+        call_X_data = args_list[0][1]["data"]
+        call_y_data = args_list[1][1]["data"]
 
         # Compare the DataFrames
         pd.testing.assert_frame_equal(call_X_data, X)
         pd.testing.assert_frame_equal(call_y_data, y)
 
         # Check other arguments
-        self.assertEqual(args_list[0][1]['name'], 'features')
-        self.assertEqual(args_list[0][1]['tags'], [VERSION])
-        self.assertEqual(args_list[1][1]['name'], 'target')
-        self.assertEqual(args_list[1][1]['tags'], [VERSION])
+        self.assertEqual(args_list[0][1]["name"], "features")
+        self.assertEqual(args_list[0][1]["tags"], [VERSION])
+        self.assertEqual(args_list[1][1]["name"], "target")
+        self.assertEqual(args_list[1][1]["tags"], [VERSION])
