@@ -30,8 +30,8 @@ DATA = {
     "lat": [34.05, np.nan, 36.16],
     "long": [-118.25, np.nan, -115.15],
     "price": [15000, 25000, 35000],
-    'state': ['CA', 'NV', 'TX'],
-    'region': ['west', 'southwest', 'south']
+    "state": ["CA", "NV", "TX"],
+    "region": ["west", "southwest", "south"],
 }
 MIN_MAX_SCALE_COLS = [
     "region",

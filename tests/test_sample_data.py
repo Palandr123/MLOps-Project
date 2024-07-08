@@ -9,7 +9,7 @@ from src.data import sample_data
 EXPECTED_SAMPLE_SIZE = len(pd.read_csv("data/samples/sample.csv"))
 
 
-@patch('src.data.download_data')
+@patch("src.data.download_data")
 def test_sample_data(mock_download_data):
     """
     Tests if `sample_data` downloads data (using the mock) and returns a sample DataFrame.
@@ -27,7 +27,7 @@ def test_sample_data(mock_download_data):
     assert len(sample) == EXPECTED_SAMPLE_SIZE
 
 
-@patch('src.data.download_data')
+@patch("src.data.download_data")
 def test_sample_data_erro(mock_download_data):
     """
     Tests if `sample_data` raises a ValueError for invalid sample number or size.
@@ -38,9 +38,9 @@ def test_sample_data_erro(mock_download_data):
     mock_download_data.return_value = None
 
     # Patch Hydra initialization (assuming it's from Hydra)
-    with patch('hydra.initialize') as mock_initialize:
+    with patch("hydra.initialize") as mock_initialize:
         # Mock config values to trigger the error (replace with actual values)
-        mock_config = {'sample_num': -1, 'sample_size': 2}
+        mock_config = {"sample_num": -1, "sample_size": 2}
         mock_initialize.return_value.config = mock_config
 
         with pytest.raises(ValueError):
