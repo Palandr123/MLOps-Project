@@ -167,3 +167,4 @@ logs
 *.pid
 airflow.cfg
 airflow.db
+pipelines
