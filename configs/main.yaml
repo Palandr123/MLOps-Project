@@ -9,4 +9,4 @@ hydra:
   mode: MULTIRUN
   sweeper:
     params:
-      +model: "bagging, knn"
+      +model: "bagging, gradient_boosting"
