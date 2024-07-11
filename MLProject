@@ -2,7 +2,7 @@
 # MLproject
 
 
-name: <Project Title> 
+name: car_price_prediction
 
 # python_env: python_env.yaml
 
