@@ -2,3 +2,11 @@ defaults:
   - _self_
   - sample_data
   - data_version
+  - model/model
+  - experiment
+
+hydra:
+  mode: MULTIRUN
+  sweeper:
+    params:
+      +model: "bagging, knn"
