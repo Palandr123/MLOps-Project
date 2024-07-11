@@ -15,7 +15,7 @@ with DAG(dag_id="prepare_data",
     sensor = ExternalTaskSensor(
         task_id='wait_for_data_extract',
         external_dag_id='extract_data',
-        execution_delta=timedelta(hours=1),
+        execution_delta=timedelta(hours=0),
         dag=dag,
     )
 
