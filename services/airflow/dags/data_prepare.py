@@ -68,7 +68,7 @@ def data_prepare_pipeline():
     df, version = extract()
     X, y = transform(df)
     X, y = validate(X, y)
-    X, y = load(X, y, version)
+    df = load(X, y, version)
 
 
 if __name__ == "__main__":
