@@ -168,3 +168,4 @@ logs
 airflow.cfg
 airflow.db
 pipelines
+mlruns
