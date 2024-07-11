@@ -1,0 +1,12 @@
+# The line below is the filename and should be stored in the root directory of the repository.
+# MLproject
+
+
+name: <Project Title> 
+
+# python_env: python_env.yaml
+
+entry_points:
+
+  main:
+    command: "python src/main.py"
