@@ -8,7 +8,7 @@ def run(args):
 
     train_data_version = cfg.train_data_version
 
-    X_train, y_train = load_features(name = "features", version=train_data_version)
+    X_train, y_train = load_features(name = "features_target", version=train_data_version)
 
     test_data_version = cfg.test_data_version
 
