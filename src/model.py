@@ -16,7 +16,7 @@ def load_features(name, version, size = 1):
     print("df columns: ", df.columns)
 
     X = df[df.columns[:-1]]
-    y = df.y
+    y = df[[df.columns[-1]]]
 
     print("shapes of X,y = ", X.shape, y.shape)
 
