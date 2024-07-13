@@ -1,6 +1,6 @@
 import hydra
 
-from model import load_features
+from model import load_features, train
 
 
 def run(args):
@@ -13,6 +13,8 @@ def run(args):
     test_data_version = cfg.test_data_version
 
     X_test, y_test = load_features(name = "features_target", version=test_data_version)
+
+    gs = train(X_train, y_train, cfg=cfg)
 
 
 @hydra.main(config_path="../configs", config_name="main", version_base=None) # type: ignore
