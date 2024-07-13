@@ -1,0 +1,15 @@
+model_name: MLP
+artifact_path: mlp_model
+
+tag_key: "model"
+tag_value: "MultiLayer Perceptron"
+
+module_name: "src.models"
+class_name: "SimpleNN"
+
+params:
+  module__input_size: [-1]  ### GETS OVERWRITTEN IN THE src/main.py
+  module__output_size: [1]  
+  module__hidden_units: [4]
+  max_epochs: [10, 20, 50]
+  optimizer__lr: [3e-4]

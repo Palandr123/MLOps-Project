@@ -4,9 +4,10 @@ defaults:
   - data_version
   - model/model
   - experiment
+  - data
 
 hydra:
   mode: MULTIRUN
   sweeper:
     params:
-      +model: "bagging, gradient_boosting"
+      +model: "nn"

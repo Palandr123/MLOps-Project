@@ -1,7 +1,6 @@
 experiment_name: "initial_experiment"
 run_name: "multi_run"
 
-test_size: 0.2
 random_state: 88
 cv_n_jobs: -1
 
