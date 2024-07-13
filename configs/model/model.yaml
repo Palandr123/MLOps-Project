@@ -3,13 +3,13 @@ defaults:
 
 folds: 3
 
-evaluation_metric: "rmse"
+evaluation_metric: "neg_root_mean_squared_error"
 cv_evaluation_metric: "mean_test_rmse"
 
 pyfunc_predict_fn: "predict"
 
 metrics:
-  rmse: "rmse"
+  rmse: "neg_root_mean_squared_error"
   mae: "neg_mean_absolute_error"
   r2: "r2"
   mape: "neg_mean_absolute_percentage_error"
