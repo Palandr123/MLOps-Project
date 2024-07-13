@@ -1,4 +1,8 @@
+import random
+
 import hydra
+import numpy as np
+import torch
 
 from model import load_features, train
 
@@ -6,21 +10,30 @@ from model import load_features, train
 def run(args):
     cfg = args
 
-    train_data_version = cfg.train_data_version
+    # Ensure reproducibility by setting random seeds
+    random.seed(cfg.random_state)
+    np.random.seed(cfg.random_state)
+    torch.manual_seed(cfg.random_state)
 
-    X_train, y_train = load_features(name = "features_target", version=train_data_version)
+    train_data_version = cfg.train_data_version
+    X_train, y_train = load_features(name="features_target", version=train_data_version)
 
     test_data_version = cfg.test_data_version
+    X_test, y_test = load_features(name="features_target", version=test_data_version)
 
-    X_test, y_test = load_features(name = "features_target", version=test_data_version)
+    # Overwrite args.model.params.input_units with the number of features
+    cfg.model.params.module__input_size = [X_train.shape[1]]
 
     gs = train(X_train, y_train, cfg=cfg)
 
+    # Ensure consistent logging (uncomment if log_metadata is defined)
+    # log_metadata(cfg, gs, X_train, y_train, X_test, y_test)
 
-@hydra.main(config_path="../configs", config_name="main", version_base=None) # type: ignore
+
+@hydra.main(config_path="../configs", config_name="main", version_base=None)
 def main(cfg=None):
     run(cfg)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
