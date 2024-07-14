@@ -7,7 +7,7 @@ import pandas as pd
 from zenml.client import Client
 import torch
 from skorch.regressor import NeuralNetRegressor
-from sklearn.model_selection import KFold, GridSearchCV
+from sklearn.model_selection import GridSearchCV
 
 
 def load_features(name, version, size=1):
@@ -49,11 +49,12 @@ def train(X_train, y_train, cfg):
 
     # Load "module.submodule.MyClass"
     class_instance = getattr(importlib.import_module(module_name), class_name)
+    optimizer = getattr(
+        importlib.import_module(cfg.model.optimizer.module_name),
+        cfg.model.optimizer.class_name,
+    )
 
-    estimator = NeuralNetRegressor(module=class_instance)
-
-    # Grid search with cross-validation
-    cv = KFold(n_splits=cfg.model.folds,shuffle=True, random_state=cfg.random_state)
+    estimator = NeuralNetRegressor(module=class_instance, optimizer=optimizer)
 
     param_grid = dict(params)
 
@@ -66,22 +67,16 @@ def train(X_train, y_train, cfg):
         scoring=scoring,
         n_jobs=cfg.cv_n_jobs,
         refit=evaluation_metric,
-        cv=3,
+        cv=cfg.model.folds,
         verbose=1,
         return_train_score=True,
     )
 
     # Ensure tensors are created consistently
-    X_train = torch.tensor(X_train.values, dtype=torch.float32)
-    y_train = torch.tensor(y_train.values, dtype=torch.float32).reshape(-1, 1)
+    X_train_np = X_train.values.astype(np.float32)
+    y_train_np = y_train.values.astype(np.float32).reshape(-1, 1)
 
-    gs.fit(X_train, y_train)
-    cv_results = (
-        pd.DataFrame(gs.cv_results_)
-        .filter(regex=r"std_|mean_|param_")
-        .sort_index(axis=1)
-    )
-    cv_results.to_csv("cv_results.csv", index=False)  # Changed filename for clarity
+    gs.fit(X_train_np, y_train_np)
 
     return gs
 
@@ -149,7 +144,10 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
         mlflow.set_tag(cfg.model.tag_key, cfg.model.tag_value)
 
         # Infer the model signature
-        signature = mlflow.models.infer_signature(X_train, gs.predict(X_train))
+        X_train_np = X_train.values.astype(np.float32)
+        y_train_np = y_train.values.astype(np.float32).reshape(-1, 1)
+        X_test_np = X_test.values.astype(np.float32)
+        signature = mlflow.models.infer_signature(X_train, gs.predict(X_train_np))
 
         # Log the model
         model_info = mlflow.sklearn.log_model(
@@ -169,6 +167,22 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
             value="best_Grid_search_model",
         )
 
+         # Evaluate the best model
+        predictions = gs.best_estimator_.predict(X_test_np)
+        eval_data = pd.DataFrame({'label': y_test, 'predictions': predictions})
+
+        results = mlflow.evaluate(
+            data=eval_data,
+            model_type="regressor",  # Correct model type for regression
+            targets="label",
+            predictions="predictions",
+            evaluators=["default"],
+        )
+
+        mlflow.log_metrics(results.metrics)
+
+        print(f"Best model metrics:\n{results.metrics}")
+
         for index, result in cv_results.iterrows():
 
             child_run_name = "_".join(["child", run_name, str(index)])  # type: ignore
@@ -181,7 +195,8 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
 
                 # Remove param_ from the beginning of the keys
                 ps = {k.replace("param_", ""): v for (k, v) in ps.items()}
-                print(f"AAAAAAA={ps}")
+                if 'max_epochs' in ps:
+                    ps['max_epochs'] = int(ps['max_epochs'])
 
                 mlflow.log_params(ps)
                 mlflow.log_metrics(ms)
@@ -196,11 +211,18 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                     importlib.import_module(module_name), class_name
                 )
 
-                estimator = class_instance(**ps)
-                estimator.fit(X_train, y_train)
+                optimizer = getattr(
+                    importlib.import_module(cfg.model.optimizer.module_name),
+                    cfg.model.optimizer.class_name,
+                )
+                estimator = NeuralNetRegressor(
+                    module=class_instance, optimizer=optimizer, **ps
+                )
+
+                estimator.fit(X_train_np, y_train_np)
 
                 signature = mlflow.models.infer_signature(
-                    X_train, estimator.predict(X_train)
+                    X_train, estimator.predict(X_train_np)
                 )
 
                 model_info = mlflow.sklearn.log_model(
@@ -215,7 +237,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                 model_uri = model_info.model_uri
                 loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
 
-                predictions = loaded_model.predict(X_test)  # type: ignore
+                predictions = loaded_model.predict(X_test_np)  # type: ignore
 
                 eval_data = pd.DataFrame(y_test)
                 eval_data.columns = ["label"]
@@ -223,7 +245,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
 
                 results = mlflow.evaluate(
                     data=eval_data,
-                    model_type="classifier",
+                    model_type="regressor",
                     targets="label",
                     predictions="predictions",
                     evaluators=["default"],
