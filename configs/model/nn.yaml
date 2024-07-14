@@ -7,9 +7,15 @@ tag_value: "MultiLayer Perceptron"
 module_name: "src.models"
 class_name: "SimpleNN"
 
+optimizer:
+  module_name: "torch.optim"
+  class_name: "Adam"
+
 params:
   module__input_size: [-1]  ### GETS OVERWRITTEN IN THE src/main.py
   module__output_size: [1]  
-  module__hidden_units: [4]
+  module__hidden_units: [8, 16, 32]
+  module__seed: [88]
   max_epochs: [10, 20, 50]
-  optimizer__lr: [3e-4]
+  optimizer__lr: [3e-4, 0.001]
+  optimizer__weight_decay: [0.0, 0.1, 1.0, 10.0, 100.0]
