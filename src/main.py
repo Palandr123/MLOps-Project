@@ -4,7 +4,7 @@ import hydra
 import numpy as np
 import torch
 
-from model import load_features, train
+from model import load_features, train, log_metadata
 
 
 def run(args):
@@ -27,7 +27,7 @@ def run(args):
     gs = train(X_train, y_train, cfg=cfg)
 
     # Ensure consistent logging (uncomment if log_metadata is defined)
-    # log_metadata(cfg, gs, X_train, y_train, X_test, y_test)
+    log_metadata(cfg, gs, X_train, y_train, X_test, y_test)
 
 
 @hydra.main(config_path="../configs", config_name="main", version_base=None)
