@@ -167,9 +167,11 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
             value="best_Grid_search_model",
         )
 
-         # Evaluate the best model
-        predictions = gs.best_estimator_.predict(X_test_np)
-        eval_data = pd.DataFrame({'label': y_test, 'predictions': predictions})
+        # Evaluate the best model
+        predictions = gs.best_estimator_.predict(X_test_np)  # type: ignore
+        eval_data = pd.DataFrame(y_test)
+        eval_data.columns = ["label"]
+        eval_data["predictions"] = predictions
 
         results = mlflow.evaluate(
             data=eval_data,
