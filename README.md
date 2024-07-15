@@ -28,4 +28,5 @@
 
 ## NOTE
 We do not have requirements.txt file because pyproject.toml and poetry.lock are the replacements for it. We prefer to use Poetry and our TA confirmed that we can use it.
+
 We also have not pushed any ```*.pkl``` file since they are too large to be stored in GitHub.
