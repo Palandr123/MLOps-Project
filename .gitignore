@@ -168,5 +168,4 @@ logs
 airflow.cfg
 airflow.db
 pipelines
-mlruns
-multirun
+*.pkl
