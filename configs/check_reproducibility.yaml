@@ -1,0 +1,8 @@
+seeds: [1, 2, 3, 4, 5]
+results_dir: results
+model_config: resnet
+
+hydra:
+  run:
+    dir: .
+

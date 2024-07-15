@@ -1,0 +1,9 @@
+Performance metrics over 5 experiments with different seeds:
+Seed 1: -9400.0263671875
+Seed 2: -9378.399088541666
+Seed 3: -9322.138020833334
+Seed 4: -9325.2421875
+Seed 5: -9301.248697916666
+
+Average performance: -9345.410872395832
+Variance in performance: 1393.9547601657414
