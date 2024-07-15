@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/c347868d08fa4fb788b7a0712c10fabb/artifacts
+end_time: 1720884494081
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c347868d08fa4fb788b7a0712c10fabb
+run_name: rumbling-chimp-5
+run_uuid: c347868d08fa4fb788b7a0712c10fabb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1720884303926
+status: 4
+tags: []
+user_id: andrey

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/andrey/MLOps-Project/mlruns/169288115182493971/37bb2d1f65f7427bae5f48a96bd18fd5/artifacts
+end_time: 1721053329057
+entry_point_name: ''
+experiment_id: '169288115182493971'
+lifecycle_stage: active
+run_id: 37bb2d1f65f7427bae5f48a96bd18fd5
+run_name: child_multi_run_ResNet_neg_root_mean_squared_error_-5342_207845052083_250
+run_uuid: 37bb2d1f65f7427bae5f48a96bd18fd5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721053261248
+status: 3
+tags: []
+user_id: andrey

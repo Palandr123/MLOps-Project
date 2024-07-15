@@ -1,0 +1,6 @@
+artifact_location: file:///home/andrey/MLOps-Project/mlruns/952200123317241685
+creation_time: 1720883253742
+experiment_id: '952200123317241685'
+last_update_time: 1720883253742
+lifecycle_stage: active
+name: bagging_initial_experiment

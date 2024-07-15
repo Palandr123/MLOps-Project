@@ -1,0 +1,25 @@
+digest: 3518df24
+name: dataset
+profile: '{"num_rows": 68701, "num_elements": 1786226}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "region", "required": true},
+  {"type": "double", "name": "year", "required": true}, {"type": "double", "name":
+  "manufacturer", "required": true}, {"type": "double", "name": "model", "required":
+  true}, {"type": "long", "name": "fuel_gas", "required": true}, {"type": "long",
+  "name": "fuel_diesel", "required": true}, {"type": "long", "name": "fuel_other",
+  "required": true}, {"type": "long", "name": "fuel_hybrid", "required": true}, {"type":
+  "long", "name": "fuel_electric", "required": true}, {"type": "long", "name": "fuel_nan",
+  "required": true}, {"type": "double", "name": "odometer", "required": true}, {"type":
+  "double", "name": "title_status", "required": true}, {"type": "long", "name": "transmission_automatic",
+  "required": true}, {"type": "long", "name": "transmission_other", "required": true},
+  {"type": "long", "name": "transmission_manual", "required": true}, {"type": "long",
+  "name": "transmission_nan", "required": true}, {"type": "double", "name": "state",
+  "required": true}, {"type": "double", "name": "lat_sin", "required": true}, {"type":
+  "double", "name": "lat_cos", "required": true}, {"type": "double", "name": "long_sin",
+  "required": true}, {"type": "double", "name": "long_cos", "required": true}, {"type":
+  "double", "name": "posting_date_month_sin", "required": true}, {"type": "double",
+  "name": "posting_date_month_cos", "required": true}, {"type": "double", "name":
+  "posting_date_day_sin", "required": true}, {"type": "double", "name": "posting_date_day_cos",
+  "required": true}, {"type": "long", "name": "price", "required": true}]}'
+source: '{"tags": {"mlflow.user": "andrey", "mlflow.source.name": "src/main.py", "mlflow.source.type":
+  "LOCAL", "mlflow.source.git.commit": "fd9336dae79a3497e3199a66a9c69d4dfe86783d"}}'
+source_type: code

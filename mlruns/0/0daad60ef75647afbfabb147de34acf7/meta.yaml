@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/0daad60ef75647afbfabb147de34acf7/artifacts
+end_time: 1721035044012
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0daad60ef75647afbfabb147de34acf7
+run_name: merciful-newt-803
+run_uuid: 0daad60ef75647afbfabb147de34acf7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721034934607
+status: 4
+tags: []
+user_id: andrey

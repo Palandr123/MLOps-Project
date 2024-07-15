@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/010410ea2a824f3a94d6f9e74e463ed4/artifacts
+end_time: 1721042157347
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 010410ea2a824f3a94d6f9e74e463ed4
+run_name: intrigued-trout-923
+run_uuid: 010410ea2a824f3a94d6f9e74e463ed4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721039983486
+status: 4
+tags: []
+user_id: andrey

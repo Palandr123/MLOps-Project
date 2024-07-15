@@ -1,0 +1,6 @@
+artifact_location: file:///home/andrey/MLOps-Project/mlruns/306807511451497804
+creation_time: 1720883354083
+experiment_id: '306807511451497804'
+last_update_time: 1720883354083
+lifecycle_stage: active
+name: gradient_boosting_initial_experiment

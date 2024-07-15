@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/5c51aba20a9148a4bf27bf2fb7a4ef36/artifacts
+end_time: 1720977351802
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5c51aba20a9148a4bf27bf2fb7a4ef36
+run_name: persistent-deer-340
+run_uuid: 5c51aba20a9148a4bf27bf2fb7a4ef36
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1720977351795
+status: 3
+tags: []
+user_id: andrey

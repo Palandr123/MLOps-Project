@@ -1,0 +1,47 @@
+artifact_path: resnet_model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.9
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.0
+mlflow_version: 2.14.3
+model_size_bytes: 625347
+model_uuid: 6f814fe708964d57ba1271c317d8501b
+run_id: eb4265c95b9b4b66847bbf26e5d65fee
+saved_input_example_info:
+  artifact_path: input_example.json
+  format: tf-serving
+  type: ndarray
+signature:
+  inputs: '[{"type": "double", "name": "region", "required": true}, {"type": "double",
+    "name": "year", "required": true}, {"type": "double", "name": "manufacturer",
+    "required": true}, {"type": "double", "name": "model", "required": true}, {"type":
+    "long", "name": "fuel_gas", "required": true}, {"type": "long", "name": "fuel_hybrid",
+    "required": true}, {"type": "long", "name": "fuel_diesel", "required": true},
+    {"type": "long", "name": "fuel_other", "required": true}, {"type": "long", "name":
+    "fuel_electric", "required": true}, {"type": "long", "name": "fuel_nan", "required":
+    true}, {"type": "double", "name": "odometer", "required": true}, {"type": "double",
+    "name": "title_status", "required": true}, {"type": "long", "name": "transmission_automatic",
+    "required": true}, {"type": "long", "name": "transmission_other", "required":
+    true}, {"type": "long", "name": "transmission_manual", "required": true}, {"type":
+    "long", "name": "transmission_nan", "required": true}, {"type": "double", "name":
+    "state", "required": true}, {"type": "double", "name": "lat_sin", "required":
+    true}, {"type": "double", "name": "lat_cos", "required": true}, {"type": "double",
+    "name": "long_sin", "required": true}, {"type": "double", "name": "long_cos",
+    "required": true}, {"type": "double", "name": "posting_date_month_sin", "required":
+    true}, {"type": "double", "name": "posting_date_month_cos", "required": true},
+    {"type": "double", "name": "posting_date_day_sin", "required": true}, {"type":
+    "double", "name": "posting_date_day_cos", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1,
+    1]}}]'
+  params: null
+utc_time_created: '2024-07-15 13:05:43.951665'

@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1721051897277
+current_stage: None
+description: null
+last_updated_timestamp: 1721051897277
+name: ResNet
+run_id: a3d98c361f18415bb3ddcc4d46ed9152
+run_link: null
+source: file:///home/andrey/MLOps-Project/mlruns/169288115182493971/a3d98c361f18415bb3ddcc4d46ed9152/artifacts/resnet_model
+status: READY
+status_message: null
+storage_location: file:///home/andrey/MLOps-Project/mlruns/169288115182493971/a3d98c361f18415bb3ddcc4d46ed9152/artifacts/resnet_model
+user_id: null
+version: 230

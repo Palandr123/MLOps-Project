@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1720885113127
+current_stage: None
+description: null
+last_updated_timestamp: 1720885113127
+name: bagging
+run_id: ac67d32bce4d44fea8665a6aa64eab8a
+run_link: null
+source: file:///home/andrey/MLOps-Project/mlruns/952200123317241685/ac67d32bce4d44fea8665a6aa64eab8a/artifacts/bagging_model
+status: READY
+status_message: null
+storage_location: file:///home/andrey/MLOps-Project/mlruns/952200123317241685/ac67d32bce4d44fea8665a6aa64eab8a/artifacts/bagging_model
+user_id: null
+version: 1

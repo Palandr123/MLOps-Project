@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1720983665404
+current_stage: None
+description: null
+last_updated_timestamp: 1720983665404
+name: MLP
+run_id: 1925ba72aa9041dbb083bdada8e6c539
+run_link: null
+source: file:///home/andrey/MLOps-Project/mlruns/811026283811715267/1925ba72aa9041dbb083bdada8e6c539/artifacts/mlp_model
+status: READY
+status_message: null
+storage_location: file:///home/andrey/MLOps-Project/mlruns/811026283811715267/1925ba72aa9041dbb083bdada8e6c539/artifacts/mlp_model
+user_id: null
+version: 97

@@ -1,0 +1,48 @@
+user_name: austinreese
+dataset_name: craigslist-carstrucks-data
+save_path: data/raw/vehicles.csv
+sample_size: 0.2
+sample_num: 1
+data_version: 1
+model:
+  folds: 3
+  evaluation_metric: neg_root_mean_squared_error
+  cv_evaluation_metric: mean_test_neg_mean_absolute_error
+  pyfunc_predict_fn: predict
+  metrics:
+    rmse: neg_root_mean_squared_error
+    mae: neg_mean_absolute_error
+    r2: r2
+    mape: neg_mean_absolute_percentage_error
+  model_name: MLP
+  artifact_path: mlp_model
+  tag_key: model
+  tag_value: MultiLayer Perceptron
+  module_name: src.models
+  class_name: SimpleNN
+  params:
+    module__input_size:
+    - -1
+    module__output_size:
+    - 1
+    module__hidden_units:
+    - 8
+    - 16
+    - 32
+    max_epochs:
+    - 10
+    - 20
+    - 50
+    optimizer__lr:
+    - 0.0003
+    optimizer__weight_decay:
+    - 0.01
+experiment_name: initial_experiment
+run_name: multi_run
+random_state: 88
+cv_n_jobs: -1
+train_data_version: '1'
+test_data_version: '2'
+data:
+  target_cols:
+  - price

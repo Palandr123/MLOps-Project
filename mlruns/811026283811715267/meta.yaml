@@ -1,0 +1,6 @@
+artifact_location: file:///home/andrey/MLOps-Project/mlruns/811026283811715267
+creation_time: 1720976696452
+experiment_id: '811026283811715267'
+last_update_time: 1720976696452
+lifecycle_stage: active
+name: MLP_initial_experiment

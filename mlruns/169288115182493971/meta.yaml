@@ -1,0 +1,6 @@
+artifact_location: file:///home/andrey/MLOps-Project/mlruns/169288115182493971
+creation_time: 1721044876778
+experiment_id: '169288115182493971'
+last_update_time: 1721044876778
+lifecycle_stage: active
+name: ResNet_initial_experiment

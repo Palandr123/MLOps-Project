@@ -1,0 +1,15 @@
+artifact_uri: file:///home/andrey/MLOps-Project/mlruns/306807511451497804/9e5d74b786a04414b41337bebff5e7f4/artifacts
+end_time: 1720885217820
+entry_point_name: ''
+experiment_id: '306807511451497804'
+lifecycle_stage: active
+run_id: 9e5d74b786a04414b41337bebff5e7f4
+run_name: multi_run_gradient_boosting_neg_root_mean_squared_error_-2163_0289250666483
+run_uuid: 9e5d74b786a04414b41337bebff5e7f4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1720885213531
+status: 4
+tags: []
+user_id: andrey
