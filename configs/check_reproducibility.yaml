@@ -1,6 +1,20 @@
 seeds: [1, 2, 3, 4, 5]
 results_dir: results
 model_config: resnet
+metrics_eval:
+  mae:
+    module_name: "sklearn.metrics"
+    class_name: "mean_absolute_error"
+  mape:
+    module_name: "sklearn.metrics"
+    class_name: "mean_absolute_percentage_error"
+  rmse: 
+    module_name: "sklearn.metrics"
+    class_name: "root_mean_squared_error"
+  r2:
+    module_name: "sklearn.metrics"
+    class_name: "r2_score"
+
 
 hydra:
   run:

@@ -1,9 +1,37 @@
 Performance metrics over 5 experiments with different seeds:
+Results for rmse
 Seed 1: -9400.0263671875
 Seed 2: -9378.399088541666
 Seed 3: -9322.138020833334
 Seed 4: -9325.2421875
 Seed 5: -9301.248697916666
-
 Average performance: -9345.410872395832
 Variance in performance: 1393.9547601657414
+
+Results for mae
+Seed 1: -7934.812825520833
+Seed 2: -7911.69775390625
+Seed 3: -7863.36767578125
+Seed 4: -7867.56005859375
+Seed 5: -7843.155436197917
+Average performance: -7884.11875
+Variance in performance: 1142.656233868058
+
+Results for r2
+Seed 1: 0.2220552364985148
+Seed 2: 0.22563340266545615
+Seed 3: 0.23489554723103842
+Seed 4: 0.23438588778177896
+Seed 5: 0.2383208672205607
+Average performance: 0.23105818827946983
+Variance in performance: 3.78053705660856e-05
+
+Results for mape
+Seed 1: -0.908545732498169
+Seed 2: -0.904807964960734
+Seed 3: -0.8987165292104086
+Seed 4: -0.8997800946235657
+Seed 5: -0.8956849376360575
+Average performance: -0.901507051785787
+Variance in performance: 2.1021092883144214e-05
+
