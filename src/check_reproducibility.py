@@ -66,8 +66,8 @@ def main(cfg: DictConfig):
             else:
                 performance_metrics[metric_name] = [best_score]
         results_eval = evaluate_model(gs, X_test, y_test, cfg.metrics_eval)
-        for metric_name, value in metrics_eval.items():
-            if metric_name in metrics_eval:
+        for metric_name, value in results_eval.items():
+            if metric_name not in metrics_eval:
                 metrics_eval[metric_name] = [value]
             else:
                 metrics_eval[metric_name].append(value)
@@ -82,6 +82,16 @@ def main(cfg: DictConfig):
             var_performance = np.var(performance_metrics[metric_name])
             f.write(f"Results for {metric_name}\n")
             f.write("\n".join([f"Seed {seed}: {score}" for seed, score in zip(cfg.seeds, performance_metrics[metric_name])]))
+            f.write(f"\nAverage performance: {avg_performance}\n")
+            f.write(f"Variance in performance: {var_performance}\n\n")
+
+        f.write(f"\nMetrics on the test dataset:\n")
+        for metric_name, metric in metrics_eval.items():
+            # Calculate average and variance of the performance metrics
+            avg_performance = np.mean(metric)
+            var_performance = np.var(metric)
+            f.write(f"Results for {metric_name}\n")
+            f.write("\n".join([f"Seed {seed}: {score}" for seed, score in zip(cfg.seeds, metric)]))
             f.write(f"\nAverage performance: {avg_performance}\n")
             f.write(f"Variance in performance: {var_performance}\n\n")
 
