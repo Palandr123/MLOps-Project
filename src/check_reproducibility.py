@@ -28,7 +28,6 @@ def evaluate_model(gs, X_test, y_test, metrics_eval):
 @hydra.main(config_path="../configs", config_name="check_reproducibility")
 def main(cfg: DictConfig):
     results_dir = Path.cwd() / Path(cfg.results_dir)
-    print(results_dir)
     results_dir.mkdir(parents=True, exist_ok=True)
 
     performance_metrics = {}
@@ -66,7 +65,7 @@ def main(cfg: DictConfig):
                 performance_metrics[metric_name].append(best_score)
             else:
                 performance_metrics[metric_name] = [best_score]
-        results_eval = evaluate_model(gs, X_test, y_test)
+        results_eval = evaluate_model(gs, X_test, y_test, cfg.metrics_eval)
         for metric_name, value in metrics_eval.items():
             if metric_name in metrics_eval:
                 metrics_eval[metric_name] = [value]

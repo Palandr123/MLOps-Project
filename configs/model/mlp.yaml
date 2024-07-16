@@ -17,5 +17,5 @@ params:
   module__hidden_units: [8, 16, 32]
   module__seed: [88]
   max_epochs: [10, 20, 50]
-  optimizer__lr: [3e-4, 0.001]
-  optimizer__weight_decay: [0.0, 0.1, 1.0, 10.0, 100.0]
+  optimizer__lr: [0.001]
+  optimizer__weight_decay: [1.0, 10.0, 100.0]
