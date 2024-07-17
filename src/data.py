@@ -348,6 +348,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
         pd.DataFrame: validated features
         pd.DataFrame: validated target feature
     """
+    cfg = compose(config_name="data")
     context = gx.get_context()
     ds_x = context.sources.add_or_update_pandas(name = "transformed_data")
     da_x = ds_x.add_dataframe_asset(name = "pandas_dataframe")
@@ -362,7 +363,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
         expectation_suite_name='transformed_data_expectation',
     )
 
-    min_max_scale_cols = ['region', 'year', 'model', 'title_status', 'state', 'manufacturer']
+    min_max_scale_cols = cfg.data.min_max_scale
     # Assume all columns scaled with min max in 0-1 range
     for col in min_max_scale_cols:
         validator_x.expect_column_values_to_be_between(
@@ -371,8 +372,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
             max_value=1,
         )
 
-    ohe_cols = ['fuel_gas', 'fuel_diesel', 'fuel_other', 'fuel_electric',
-                'fuel_hybrid', 'transmission_automatic', 'transmission_manual','transmission_other']
+    ohe_cols = cfg.data.ohe_cols
     # Assume all ohe-transformed cols are 0 or 1
     for col in ohe_cols:
         validator_x.expect_column_values_to_be_in_set(
@@ -396,6 +396,14 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
         column='odometer'
     )
 
+    # Assume WIM is not null
+    validator_x.expect_column_values_to_not_be_null(
+        column='WIM'
+    )
+    # Assume VDS is not null
+    validator_x.expect_column_values_to_not_be_null(
+        column='VDS'
+    )
     # Store expectation suite
     validator_x.save_expectation_suite(
         discard_failed_expectations = False
