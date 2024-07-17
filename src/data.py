@@ -14,6 +14,7 @@ from sklearn.preprocessing import FunctionTransformer, OrdinalEncoder, MinMaxSca
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.compose import ColumnTransformer
 from category_encoders.one_hot import OneHotEncoder
+import yaml
 import zenml
 
 def download_data(user_name: str, dataset_name: str, save_path: str | Path):
@@ -309,6 +310,9 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     ohe_enc = OneHotEncoder(cols=list(cfg.data.ohe_cols))
     ohe_cols = ohe_enc.fit_transform(X[cfg.data.ohe_cols + ["id"]])
+    with open('configs/ohe_out_names.yaml', 'w') as outfile:
+        yaml.dump({'ohe_cols': list(ohe_enc.get_feature_names_out(input_features=cfg.data.ohe_cols))[:-1]}, outfile)
+
     X = X.drop(cfg.data.ohe_cols, axis=1)
     X = X.merge(ohe_cols,on="id")
 
@@ -337,6 +341,7 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     X = X.drop(cfg.data.drop_cols, axis=1)
 
     X = X.loc[:, ~X.columns.duplicated()].copy()
+    X = X.loc[:, ~X.index.duplicated()].copy()
     return X, y
 
 def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -348,6 +353,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
         pd.DataFrame: validated target feature
     """
     cfg = compose(config_name="data")
+    ohe_out = compose(config_name="ohe_out_names")
     context = gx.get_context()
     ds_x = context.sources.add_or_update_pandas(name = "transformed_data")
     da_x = ds_x.add_dataframe_asset(name = "pandas_dataframe")
@@ -371,7 +377,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
             max_value=1,
         )
 
-    ohe_cols = cfg.data.ohe_cols
+    ohe_cols = ohe_out.ohe_out_names.ohe_cols
     # Assume all ohe-transformed cols are 0 or 1
     for col in ohe_cols:
         validator_x.expect_column_values_to_be_in_set(
