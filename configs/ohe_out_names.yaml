@@ -5,14 +5,17 @@ ohe_cols:
 - title_status_4
 - title_status_5
 - title_status_6
+- title_status_7
 - transmission_1
 - transmission_2
 - transmission_3
+- transmission_4
 - fuel_1
 - fuel_2
 - fuel_3
 - fuel_4
 - fuel_5
+- fuel_6
 - state_1
 - state_2
 - state_3
@@ -62,8 +65,6 @@ ohe_cols:
 - state_47
 - state_48
 - state_49
-- state_50
-- state_51
 - manufacturer_1
 - manufacturer_2
 - manufacturer_3
@@ -103,5 +104,3 @@ ohe_cols:
 - manufacturer_37
 - manufacturer_38
 - manufacturer_39
-- manufacturer_40
-- manufacturer_41

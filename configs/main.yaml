@@ -10,4 +10,4 @@ hydra:
   mode: MULTIRUN
   sweeper:
     params:
-      +model: "mlp, resnet"
+      +model: "mlp"

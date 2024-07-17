@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/ccd76b63f6de4bc29a3e03c6e5674bbe/artifacts
+end_time: 1721252100023
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ccd76b63f6de4bc29a3e03c6e5674bbe
+run_name: classy-smelt-252
+run_uuid: ccd76b63f6de4bc29a3e03c6e5674bbe
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721251927474
+status: 4
+tags: []
+user_id: andrey

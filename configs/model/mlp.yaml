@@ -14,8 +14,10 @@ optimizer:
 params:
   module__input_size: [-1]  ### GETS OVERWRITTEN IN THE src/main.py
   module__output_size: [1]  
-  module__hidden_units: [8, 16, 32]
+  module__hidden_units1: [32, 64, 128]
+  module__hidden_units2: [16, 32, 64]
+  module__hidden_units3: [8, 16, 32]
   module__seed: [88]
-  max_epochs: [10, 20, 50]
+  max_epochs: [20]
   optimizer__lr: [0.001]
   optimizer__weight_decay: [1.0, 10.0, 100.0]
