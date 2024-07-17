@@ -1,3 +1,46 @@
 data:
   target_cols:
     - "price"
+
+  target_low: 1000
+
+  target_high: 40000
+
+  impute_most_frequent: ["manufacturer", "model", "fuel", "title_status", "transmission", "state"]
+
+  impute_median: ["year"]
+  
+  impute_mean: ["odometer", "lat", "long", "posting_date"]
+
+  dt_feature: 
+    - "posting_date"
+
+  periodic_transform:
+    lat:
+      offset: 90
+      period: 180
+    long:
+      offset: 0
+      period: 180
+    posting_date_month:
+      offset: 0
+      period: 12
+    posting_date_day:
+      offset: 0
+      period: 31
+
+  min_max_scale: ["year"]
+
+  std_scale: ["odometer"]
+
+  ohe_cols: ["title_status", "transmission", "fuel", "state", "manufacturer"]
+
+  label_cols: ["WIM", "VDS", "model", "region"]
+
+  drop_rows: ["VIN"]
+
+  drop_cols: ["condition", "cylinders", "VIN", "drive",
+              "size", "type", "paint_color", "county",
+              "image_url", "description", "posting_date",
+              "id", "url", "region_url",
+              "lat", "long", "posting_date_month", "posting_date_day"]

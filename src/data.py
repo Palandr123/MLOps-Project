@@ -10,8 +10,10 @@ import numpy as np
 import great_expectations as gx
 from great_expectations.data_context import FileDataContext
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler, StandardScaler, LabelEncoder
-from category_encoders.one_hot import OneHotEncoder
+from sklearn.preprocessing import FunctionTransformer, OrdinalEncoder, MinMaxScaler, StandardScaler, LabelEncoder, OneHotEncoder
+from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.compose import ColumnTransformer
+#from category_encoders.one_hot import OneHotEncoder
 import zenml
 
 def download_data(user_name: str, dataset_name: str, save_path: str | Path):
@@ -269,86 +271,72 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         pd.DataFrame: transformed features
         pd.DataFrame: target feature
     """
-    # Columns with lot of nans
-    lot_nans = ['condition', 'cylinders', 'VIN', 'drive', 'size', 'type', 'paint_color', 'county']
-    df = df.drop(lot_nans, axis=1)
-    # Convert to datetime
-    df['posting_date_datetime'] = pd.to_datetime(df['posting_date'])
-    # drop unused features
-    features_not_used = ['image_url', 'description', 'posting_date', 'id', 'url', 'region_url']
-    df = df.drop(features_not_used, axis=1)
-    # Impute with most frequent
-    imp_most_frequent = SimpleImputer(missing_values=np.nan, strategy='most_frequent')
-    cols_most_frequent = ['manufacturer', 'model', 'fuel', 'title_status', 'transmission']
+    # Initialize Hydra with config path (replace with your config file)
+    initialize(config_path="../configs", version_base="1.1")
+    cfg = compose(config_name="data")
 
-    df[cols_most_frequent] = imp_most_frequent.fit_transform(df[cols_most_frequent])
-    # Impute median
-    imp_median = SimpleImputer(missing_values=np.nan, strategy='median')
-    cols_median = ['year']
+    labels = cfg.data.target_cols
 
-    df[cols_median] = imp_median.fit_transform(df[cols_median])
+    df = df[(df[labels[0]] >= cfg.data.target_low) & (df[labels[0]] <= cfg.data.target_high)]
+    df = df.dropna(subset=cfg.data.drop_rows)
+    df = df.reset_index(drop=True)
+    X_cols = [col for col in df.columns if col not in labels]
+    X = df[X_cols]
+    y = df[labels]
 
+    for dt_feature in list(cfg.data.dt_feature):
+        X[dt_feature] = pd.to_datetime(X[dt_feature])
+        X[dt_feature] = X[dt_feature].apply(lambda x: np.nan if x is pd.NaT else x.timestamp())
     
-    df['posting_date_datetime'] = df['posting_date_datetime'].apply(lambda x: np.nan if x is pd.NaT else x.timestamp())
-    # Impute mean
-    imp_mean = SimpleImputer(missing_values=np.nan, strategy='mean')
-    cols_mean = ['odometer', 'lat', 'long', 'posting_date_datetime']
+    X["WIM"] = X["VIN"].apply(lambda x: x[:3])
+    X["VDS"] = X["VIN"].apply(lambda x: x[3:8])
 
-    df[cols_mean] = imp_mean.fit_transform(df[cols_mean])
-    # Transform date to month, day to further transform
-    df['posting_date_datetime'] = df['posting_date_datetime'].apply(lambda x: pd.Timestamp.fromtimestamp(x))
-    df['posting_date_month'] = df['posting_date_datetime'].apply(lambda x: x.month)
-    df['posting_date_day'] = df['posting_date_datetime'].apply(lambda x: x.day)
-    df = df.drop(['posting_date_datetime'], axis=1)
+    most_freq_imp = SimpleImputer(missing_values=np.nan, strategy="most_frequent")
+    for imp_m_f in cfg.data.impute_most_frequent:
+        X[[imp_m_f]] = most_freq_imp.fit_transform(X[[imp_m_f]])
 
-    # Ordinal encoding
-    ordinal_enc_title = OrdinalEncoder(categories=[['parts_only', 'missing', 'salvage', 'lien', 'rebuilt', 'clean']], handle_unknown='use_encoded_value', unknown_value=-1)
-    df['title_status'] = ordinal_enc_title.fit_transform(df[['title_status']])
+    median_imp = SimpleImputer(missing_values=np.nan, strategy="median")
+    for imp_median in cfg.data.impute_median:
+        X[[imp_median]] = median_imp.fit_transform(X[[imp_median]])
 
-    # One-hot encoding
-    ohe_cols = ['transmission', 'fuel']
-    ohe = OneHotEncoder(cols=ohe_cols, use_cat_names=True)
-    df = ohe.fit_transform(df)
+    mean_imp = SimpleImputer(missing_values=np.nan, strategy="mean")
+    for imp_mean in cfg.data.impute_mean:
+        X[[imp_mean]] = mean_imp.fit_transform(X[[imp_mean]])
 
-    # Label encoding
-    label_cols = ['state', 'manufacturer', 'region', 'model']
+    min_max_scale = MinMaxScaler()
+    X[cfg.data.min_max_scale] = min_max_scale.fit_transform(X[cfg.data.min_max_scale])
+
+    std_scale = StandardScaler()
+    X[cfg.data.std_scale] = std_scale.fit_transform(X[cfg.data.std_scale])
+
+    ohe_enc = OneHotEncoder(cols=list(cfg.data.ohe_cols))
+    ohe_cols = ohe_enc.fit_transform(X[cfg.data.ohe_cols + ["id"]])
+    X = X.drop(cfg.data.ohe_cols, axis=1)
+    X = X.merge(ohe_cols,on="id")
+
+    X[cfg.data.dt_feature[0]] = X[cfg.data.dt_feature[0]].apply(lambda x: pd.Timestamp.fromtimestamp(x))
+
+    X[f"{cfg.data.dt_feature[0]}_month"] = X[cfg.data.dt_feature[0]].apply(lambda x: x.month)
+    X[f"{cfg.data.dt_feature[0]}_day"] = X[cfg.data.dt_feature[0]].apply(lambda x: x.day)
+
+    def sin_transform(offset, period):
+        return lambda x: np.sin((x + offset) / period * 2 * np.pi)
+
+    def cos_transform(offset, period):
+        return lambda x: np.cos((x + offset) / period * 2 * np.pi)
+    
+    for periodic_col in list(cfg.data.periodic_transform):
+        offset = cfg.data.periodic_transform[periodic_col]['offset']
+        period = cfg.data.periodic_transform[periodic_col]['period']
+        X[f"{periodic_col}_sin"] = X[periodic_col].apply(sin_transform(offset, period))
+        X[f"{periodic_col}_cos"] = X[periodic_col].apply(cos_transform(offset, period))
+        
+
     label_enc = LabelEncoder()
+    for feature in list(cfg.data.label_cols):
+        X[feature] = label_enc.fit_transform(X[feature])
 
-    for feature in label_cols:
-        df[feature] = label_enc.fit_transform(df[feature])
-
-    # Periodic encode
-    def generate_periodic_encoder(encode_type='sin', offset=0, period=12):
-        if encode_type == 'sin':
-            return lambda x: np.sin(2 * np.pi * (x + offset) / period)
-        elif encode_type == 'cos':
-            return lambda x: np.cos(2 * np.pi * (x + offset) / period)
-
-    df['lat_sin'] = df['lat'].apply(generate_periodic_encoder('sin', 90, 180))
-    df['lat_cos'] = df['lat'].apply(generate_periodic_encoder('cos', 90, 180))
-    df['long_sin'] = df['long'].apply(generate_periodic_encoder('sin', 0, 180))
-    df['long_cos'] = df['long'].apply(generate_periodic_encoder('cos', 0, 180))
-    df['posting_date_month_sin'] = df['posting_date_month'].apply(generate_periodic_encoder('sin', 0, 12))
-    df['posting_date_month_cos'] = df['posting_date_month'].apply(generate_periodic_encoder('cos', 0, 12))
-    df['posting_date_day_sin'] = df['posting_date_day'].apply(generate_periodic_encoder('sin', 0, 31))
-    df['posting_date_day_cos'] = df['posting_date_day'].apply(generate_periodic_encoder('cos', 0, 31))
-    df = df.drop(['lat', 'long', 'posting_date_month', 'posting_date_day'], axis=1)
-
-    df = df[df['price'] >= 1000]
-    df = df[df['price'] <= 40000]
-
-    min_max_scale_cols = ['region', 'year', 'model', 'title_status', 'state', 'manufacturer']
-    scaler = MinMaxScaler()
-
-    df[min_max_scale_cols] = scaler.fit_transform(df[min_max_scale_cols])
-
-    std_scale_cols = ['odometer']
-    scaler = StandardScaler()
-    df[std_scale_cols] = scaler.fit_transform(df[std_scale_cols])
-
-    y = df[['price']]
-    X = df.drop(['price'], axis=1)
-    
+    X = X.drop(cfg.data.drop_cols, axis=1)
     return X, y
 
 def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
