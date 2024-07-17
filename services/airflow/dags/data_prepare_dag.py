@@ -9,7 +9,7 @@ from airflow.sensors.external_task import ExternalTaskSensor
 
 with DAG(dag_id="prepare_data",
          start_date=datetime(2024, 6, 29, tz="UTC"),
-         schedule="*/30 * * * *",
+         schedule="*/10 * * * *",
          catchup=False) as dag:
     
     sensor = ExternalTaskSensor(

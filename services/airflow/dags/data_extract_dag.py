@@ -15,7 +15,7 @@ os.chdir(PROJECT_HOME)
 
 with DAG(dag_id="extract_data",
          start_date=datetime(2024, 6, 29, tz="UTC"),
-         schedule="*/30 * * * *",
+         schedule="*/10 * * * *",
          catchup=False) as dag:
     
     def sample_step():
