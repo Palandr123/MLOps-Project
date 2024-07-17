@@ -376,7 +376,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
             max_value=1,
         )
 
-    ohe_cols = ohe_out.ohe_out_names.ohe_cols
+    ohe_cols = ohe_out.ohe_cols
     # Assume all ohe-transformed cols are 0 or 1
     for col in ohe_cols:
         validator_x.expect_column_values_to_be_in_set(
