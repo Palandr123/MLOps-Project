@@ -10,10 +10,10 @@ import numpy as np
 import great_expectations as gx
 from great_expectations.data_context import FileDataContext
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import FunctionTransformer, OrdinalEncoder, MinMaxScaler, StandardScaler, LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import FunctionTransformer, OrdinalEncoder, MinMaxScaler, StandardScaler, LabelEncoder
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.compose import ColumnTransformer
-#from category_encoders.one_hot import OneHotEncoder
+from category_encoders.one_hot import OneHotEncoder
 import zenml
 
 def download_data(user_name: str, dataset_name: str, save_path: str | Path):
@@ -271,8 +271,6 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         pd.DataFrame: transformed features
         pd.DataFrame: target feature
     """
-    # Initialize Hydra with config path (replace with your config file)
-    initialize(config_path="../configs", version_base="1.1")
     cfg = compose(config_name="data")
 
     labels = cfg.data.target_cols
