@@ -287,7 +287,7 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         X[dt_feature] = pd.to_datetime(X[dt_feature])
         X[dt_feature] = X[dt_feature].apply(lambda x: np.nan if x is pd.NaT else x.timestamp())
     
-    X["WIM"] = X["VIN"].apply(lambda x: x[:3])
+    X["WMI"] = X["VIN"].apply(lambda x: x[:3])
     X["VDS"] = X["VIN"].apply(lambda x: x[3:8])
 
     most_freq_imp = SimpleImputer(missing_values=np.nan, strategy="most_frequent")
@@ -302,15 +302,17 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     for imp_mean in cfg.data.impute_mean:
         X[[imp_mean]] = mean_imp.fit_transform(X[[imp_mean]])
 
-    min_max_scale = MinMaxScaler()
-    X[cfg.data.min_max_scale] = min_max_scale.fit_transform(X[cfg.data.min_max_scale])
+    min_max_scaler = MinMaxScaler()
+    for min_max in cfg.data.min_max_scale:
+        X[[min_max]] = min_max_scaler.fit_transform(X[[min_max]])
 
-    std_scale = StandardScaler()
-    X[cfg.data.std_scale] = std_scale.fit_transform(X[cfg.data.std_scale])
+    std_scaler = StandardScaler()
+    for std_scale in cfg.data.std_scale:
+        X[[std_scale]] = std_scaler.fit_transform(X[[std_scale]])
 
     ohe_enc = OneHotEncoder(cols=list(cfg.data.ohe_cols))
     ohe_cols = ohe_enc.fit_transform(X[cfg.data.ohe_cols + ["id"]])
-    with open('configs/ohe_out_names.yaml', 'w') as outfile:
+    with open('../configs/ohe_out_names.yaml', 'w') as outfile:
         yaml.dump({'ohe_cols': list(ohe_enc.get_feature_names_out(input_features=cfg.data.ohe_cols))[:-1]}, outfile)
 
     X = X.drop(cfg.data.ohe_cols, axis=1)
@@ -402,7 +404,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
 
     # Assume WIM is not null
     validator_x.expect_column_values_to_not_be_null(
-        column='WIM'
+        column='WMI'
     )
     # Assume VDS is not null
     validator_x.expect_column_values_to_not_be_null(

@@ -35,7 +35,7 @@ data:
 
   ohe_cols: ["title_status", "transmission", "fuel", "state", "manufacturer"]
 
-  label_cols: ["WIM", "VDS", "model", "region"]
+  label_cols: ["WMI", "VDS", "model", "region"]
 
   drop_rows: ["VIN"]
 
@@ -44,3 +44,5 @@ data:
               "image_url", "description", "posting_date",
               "id", "url", "region_url",
               "lat", "long", "posting_date_month", "posting_date_day"]
+  
+  
