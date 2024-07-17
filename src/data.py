@@ -341,7 +341,6 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     X = X.drop(cfg.data.drop_cols, axis=1)
 
     X = X.loc[:, ~X.columns.duplicated()].copy()
-    X = X.loc[:, ~X.index.duplicated()].copy()
     return X, y
 
 def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
