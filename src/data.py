@@ -312,7 +312,7 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     ohe_enc = OneHotEncoder(cols=list(cfg.data.ohe_cols))
     ohe_cols = ohe_enc.fit_transform(X[cfg.data.ohe_cols + ["id"]])
-    with open('../configs/ohe_out_names.yaml', 'w') as outfile:
+    with open('configs/ohe_out_names.yaml', 'w') as outfile:
         yaml.dump({'ohe_cols': list(ohe_enc.get_feature_names_out(input_features=cfg.data.ohe_cols))[:-1]}, outfile)
 
     X = X.drop(cfg.data.ohe_cols, axis=1)
