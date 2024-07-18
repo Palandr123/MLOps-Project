@@ -272,6 +272,7 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         pd.DataFrame: transformed features
         pd.DataFrame: target feature
     """
+    client = zenml.client.Client()
     cfg = compose(config_name="data")
 
     labels = cfg.data.target_cols
@@ -310,13 +311,24 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     for std_scale in cfg.data.std_scale:
         X[[std_scale]] = std_scaler.fit_transform(X[[std_scale]])
 
-    ohe_enc = OneHotEncoder(cols=list(cfg.data.ohe_cols))
-    ohe_cols = ohe_enc.fit_transform(X[cfg.data.ohe_cols + ["id"]])
-    with open('configs/ohe_out_names.yaml', 'w') as outfile:
-        yaml.dump({'ohe_cols': list(ohe_enc.get_feature_names_out(input_features=cfg.data.ohe_cols))[:-1]}, outfile)
+    artifacts = client.list_artifacts(name="cat_transform")
+    cat_transformer = artifacts[-1].load()
 
-    X = X.drop(cfg.data.ohe_cols, axis=1)
-    X = X.merge(ohe_cols,on="id")
+    transformed = cat_transformer.transform(X)
+    X_cat_transformed = pd.DataFrame(transformed.toarray(), columns = cat_transformer.get_feature_names_out())
+
+    X = X.drop(list(cfg.data.ohe_cols) + list(cfg.data.label_cols), axis=1)
+    X = pd.merge(X, X_cat_transformed, right_index=True, left_index=True)
+
+    ohe_feature_names = list(cat_transformer.named_transformers_["ohe"].get_feature_names_out())
+    ohe_feature_names = [f"ohe__{name}" for name in ohe_feature_names]
+    with open('configs/ohe_out_names.yaml', 'w') as outfile:
+        yaml.dump({'ohe_cols': ohe_feature_names}, outfile)
+
+    label_feature_names = list(cat_transformer.named_transformers_["label"].get_feature_names_out())
+    label_feature_names = [f"label__{name}" for name in label_feature_names]
+    with open('configs/label_out_names.yaml', 'w') as outfile:
+        yaml.dump({'label_cols': label_feature_names}, outfile)
 
     X[cfg.data.dt_feature[0]] = X[cfg.data.dt_feature[0]].apply(lambda x: pd.Timestamp.fromtimestamp(x))
 
@@ -334,11 +346,6 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         period = cfg.data.periodic_transform[periodic_col]['period']
         X[f"{periodic_col}_sin"] = X[periodic_col].apply(sin_transform(offset, period))
         X[f"{periodic_col}_cos"] = X[periodic_col].apply(cos_transform(offset, period))
-        
-
-    label_enc = LabelEncoder()
-    for feature in list(cfg.data.label_cols):
-        X[feature] = label_enc.fit_transform(X[feature])
 
     X = X.drop(cfg.data.drop_cols, axis=1)
 
@@ -355,6 +362,7 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
     """
     cfg = compose(config_name="data")
     ohe_out = compose(config_name="ohe_out_names")
+    label_out = compose(config_name="label_out_names")
     context = gx.get_context()
     ds_x = context.sources.add_or_update_pandas(name = "transformed_data")
     da_x = ds_x.add_dataframe_asset(name = "pandas_dataframe")
@@ -402,14 +410,13 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
         column='odometer'
     )
 
-    # Assume WIM is not null
-    validator_x.expect_column_values_to_not_be_null(
-        column='WMI'
+    label_cols = label_out.label_cols
+    # Assume all label-transformed cols are not nan
+    for col in label_cols:
+        validator_x.expect_column_values_to_not_be_null(
+            column=col
     )
-    # Assume VDS is not null
-    validator_x.expect_column_values_to_not_be_null(
-        column='VDS'
-    )
+        
     # Store expectation suite
     validator_x.save_expectation_suite(
         discard_failed_expectations = False

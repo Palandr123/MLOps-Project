@@ -28,10 +28,10 @@ def run(args):
     print(int(X_test.iloc[:, cfg.model.params.module__region_idx].nunique().iloc[0]))
     cfg.model.params.module__num_regions = [int(X_train.iloc[:, cfg.model.params.module__region_idx].nunique().iloc[0])]
 
-    # gs = train(X_train, y_train, cfg=cfg)
+    gs = train(X_train, y_train, cfg=cfg)
 
     # # Ensure consistent logging (uncomment if log_metadata is defined)
-    # log_metadata(cfg, gs, X_train, y_train, X_test, y_test)
+    log_metadata(cfg, gs, X_train, y_train, X_test, y_test)
 
 
 @hydra.main(config_path="../configs", config_name="main", version_base=None)
