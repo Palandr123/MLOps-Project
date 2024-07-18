@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from zenml.client import Client
 import torch
+from skorch.callbacks import BatchScoring
 from skorch.regressor import NeuralNetRegressor
 from sklearn.model_selection import GridSearchCV
 
@@ -222,6 +223,16 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                 )
 
                 estimator.fit(X_train_np, y_train_np)
+                
+                train_losses = estimator.history[:, "train_loss"]
+                valid_losses = estimator.history[:, "valid_loss"]
+
+                for idx, train_loss in enumerate(train_losses):
+                    mlflow.log_metric("train_loss", train_loss, step=idx)
+                for idx, valid_loss in enumerate(valid_losses):
+                    mlflow.log_metric("valid_loss", valid_loss, step=idx)
+
+                mlflow.artifacts.download_artifacts()
 
                 signature = mlflow.models.infer_signature(
                     X_train, estimator.predict(X_train_np)
