@@ -330,6 +330,11 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     with open('configs/label_out_names.yaml', 'w') as outfile:
         yaml.dump({'label_cols': label_feature_names}, outfile)
 
+    for label_feat in label_feature_names:
+        rows_to_drop = X.index[X[label_feat] == -1.0]
+        X = X.drop(rows_to_drop)
+    X = X.reset_index(drop=True)
+
     X[cfg.data.dt_feature[0]] = X[cfg.data.dt_feature[0]].apply(lambda x: pd.Timestamp.fromtimestamp(x))
 
     X[f"{cfg.data.dt_feature[0]}_month"] = X[cfg.data.dt_feature[0]].apply(lambda x: x.month)
