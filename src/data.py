@@ -16,8 +16,6 @@ from sklearn.compose import ColumnTransformer
 from category_encoders.one_hot import OneHotEncoder
 import yaml
 import zenml
-from zenml.materializers.pandas_materializer import PandasMaterializer
-
 
 def download_data(user_name: str, dataset_name: str, save_path: str | Path):
     """
@@ -474,8 +472,8 @@ def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, p
         return X, y
 
 def load_features(X: pd.DataFrame, y: pd.DataFrame, ver: str):
-    data = pd.concat([X, y], axis=1)
-    zenml.save_artifact(data = data, name="features_target", tags=["data_preparation"], materializer=PandasMaterializer)
+    zenml.save_artifact(data = X, name = "features", tags = [ver])
+    zenml.save_artifact(data = y, name = "target", tags = [ver])
 
 
 

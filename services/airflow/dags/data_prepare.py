@@ -56,8 +56,11 @@ def validate(
 @step(enable_cache=False)
 def load(
     X: pd.DataFrame, y: pd.DataFrame, version: str
-) -> None:
-    load_features(X, y, version)
+) -> Annotated[
+    pd.DataFrame, ArtifactConfig(name="features_target", tags=["data_preparation"])
+]:
+
+    return pd.concat([X, y], axis=1)
 
 
 @pipeline()
