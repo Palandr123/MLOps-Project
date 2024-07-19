@@ -4,7 +4,7 @@ artifact_path: resnet_model
 tag_key: "model"
 tag_value: "Fully Connected ResNet"
 
-module_name: "src.models"
+module_name: "src.nn"
 class_name: "FullyConnectedResNet"
 
 optimizer:

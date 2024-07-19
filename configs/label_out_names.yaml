@@ -1,0 +1,5 @@
+label_cols:
+- label__WMI
+- label__VDS
+- label__model
+- label__region

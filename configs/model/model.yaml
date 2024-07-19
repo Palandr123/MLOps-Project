@@ -7,6 +7,10 @@ evaluation_metric: "neg_root_mean_squared_error"
 cv_evaluation_metric: "mean_test_neg_mean_absolute_error"
 
 pyfunc_predict_fn: "predict"
+region_column: "label__region"
+wmi_column: "label__WMI"
+vds_column: "label__VDS"
+model_column: "label__model"
 
 metrics:
   rmse: "neg_root_mean_squared_error"

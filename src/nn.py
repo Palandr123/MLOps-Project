@@ -16,26 +16,51 @@ class SimpleNN(nn.Module):
         num_regions,
         regions_embed_dim,
         region_idx,
+        num_wmis,
+        wmis_embed_dim,
+        wmi_idx,
+        num_vds,
+        vds_embed_dim,
+        vds_idx,
+        num_models,
+        models_embed_dim,
+        model_idx,
         seed,
     ):
         random.seed(int(seed))
         np.random.seed(int(seed))
         torch.manual_seed(int(seed))
         super(SimpleNN, self).__init__()
-        self.embed_region = nn.Embedding(num_regions, regions_embed_dim)
-        self.hidden1 = nn.Linear(int(input_size)-1+regions_embed_dim, int(hidden_units1))
+        self.embed_region = nn.Embedding(int(num_regions), int(regions_embed_dim))
+        self.embed_wmi = nn.Embedding(int(num_wmis), int(wmis_embed_dim))
+        self.embed_vds = nn.Embedding(int(num_vds), int(vds_embed_dim))
+        self.embed_model = nn.Embedding(int(num_models), int(models_embed_dim))
+        self.hidden1 = nn.Linear(int(input_size)-4+int(regions_embed_dim)+int(wmis_embed_dim)+int(vds_embed_dim)+int(models_embed_dim), int(hidden_units1))
         self.hidden2 = nn.Linear(int(hidden_units1), int(hidden_units2))
         self.hidden3 = nn.Linear(int(hidden_units2), int(hidden_units3))
         self.relu = nn.ReLU()
         self.output = nn.Linear(int(hidden_units3), int(output_size))
-        self.region_idx = region_idx
+        self.region_idx = int(region_idx)
+        self.wmi_idx = int(wmi_idx)
+        self.vds_idx = int(vds_idx)
+        self.model_idx = int(model_idx)
 
     def forward(self, x):
         mask = torch.ones(x.shape[1], dtype=torch.bool)
         mask[self.region_idx] = False
+        mask[self.wmi_idx] = False
+        mask[self.vds_idx] = False
+        mask[self.model_idx] = False
         region = self.embed_region(x[:, self.region_idx].int())
+        wmi = self.embed_wmi(x[:, self.wmi_idx].int())
+        vds = self.embed_vds(x[:, self.vds_idx].int())
+        try:
+            model = self.embed_model(x[:, self.model_idx].int())
+        except IndexError:
+            print(x[:, self.model_idx].int())
+            raise IndexError("ABOBA!")
         x = x[:, mask]
-        x = self.hidden1(torch.cat([x, region], dim=1))
+        x = self.hidden1(torch.cat([x, region, wmi, vds, model], dim=1))
         x = self.relu(x)
         x = self.hidden2(x)
         x = self.relu(x)
