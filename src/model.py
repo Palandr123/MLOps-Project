@@ -20,6 +20,7 @@ def load_features(name, version, size=1):
     artifacts = sorted(artifacts, key=lambda x: x.version, reverse=True)
 
     df = artifacts[0].load()
+    df = df.dropna()
     df = df.sample(
         frac=size, random_state=88
     )  # Ensure reproducibility with a fixed random state
