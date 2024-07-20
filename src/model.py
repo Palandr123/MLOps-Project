@@ -1,5 +1,6 @@
 import importlib
 import random
+import os
 
 import mlflow
 import numpy as np
@@ -8,6 +9,7 @@ from zenml.client import Client
 import torch
 from skorch.regressor import NeuralNetRegressor
 from sklearn.model_selection import GridSearchCV
+import matplotlib.pyplot as plt
 
 
 def load_features(name, version, size=1):
@@ -84,6 +86,29 @@ def train(X_train, y_train, cfg):
     return gs
 
 
+def plot_and_log_metrics(estimator, plot_name, artifact_path):
+    """Plot and log training and validation loss."""
+    train_losses = estimator.history[:, "train_loss"]
+    valid_losses = estimator.history[:, "valid_loss"]
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(train_losses, label="Train Loss")
+    plt.plot(valid_losses, label="Valid Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.title("Training and Validation Loss")
+    plt.legend()
+
+    plot_path = f"{plot_name}.png"
+    plt.savefig(plot_path)
+    plt.close()
+
+    mlflow.log_artifact(plot_path, artifact_path=artifact_path)
+    os.remove(plot_path)
+
+    return plot_path
+
+
 def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
 
     cv_results = (
@@ -131,6 +156,8 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
 
     # Parent run
     with mlflow.start_run(run_name=run_name, experiment_id=experiment_id) as run:
+        plot_path = plot_and_log_metrics(gs.best_estimator_, f"loss_{cfg.model.model_name}_best", cfg.model.model_name)
+        mlflow.artifacts.download_artifacts(run_id=run.info.run_id, artifact_path=f"{cfg.model.model_name}/{plot_path}", dst_path="results")
 
         df_train_dataset = mlflow.data.pandas_dataset.from_pandas(df=df_train, targets=cfg.data.target_cols[0])  # type: ignore
         df_test_dataset = mlflow.data.pandas_dataset.from_pandas(df=df_test, targets=cfg.data.target_cols[0])  # type: ignore
@@ -193,7 +220,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
             child_run_name = "_".join(["child", run_name, str(index)])  # type: ignore
             with mlflow.start_run(
                 run_name=child_run_name, experiment_id=experiment_id, nested=True
-            ):  # , tags=best_metrics_dict):
+            ) as child_run:  # , tags=best_metrics_dict):
                 ps = result.filter(regex="param_").to_dict()
                 ms = result.filter(regex="mean_").to_dict()
                 stds = result.filter(regex="std_").to_dict()
@@ -225,6 +252,9 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                 )
 
                 estimator.fit(X_train_np, y_train_np)
+
+                plot_path = plot_and_log_metrics(estimator, f"loss_{cfg.model.model_name}_{index}", cfg.model.model_name)
+                mlflow.artifacts.download_artifacts(run_id=child_run.info.run_id, artifact_path=f"{cfg.model.model_name}/{plot_path}", dst_path="results")
                 
                 train_losses = estimator.history[:, "train_loss"]
                 valid_losses = estimator.history[:, "valid_loss"]
