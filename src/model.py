@@ -156,8 +156,8 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
 
     # Parent run
     with mlflow.start_run(run_name=run_name, experiment_id=experiment_id) as run:
-        plot_path = plot_and_log_metrics(gs.best_estimator_, f"loss_{cfg.model.model_name}_best", cfg.model.model_name)
-        mlflow.artifacts.download_artifacts(run_id=run.info.run_id, artifact_path=f"{cfg.model.model_name}/{plot_path}", dst_path="results")
+        plot_path = plot_and_log_metrics(gs.best_estimator_, f"loss_{cfg.model.model_name}_best", cfg.model.artifact_path)
+        mlflow.artifacts.download_artifacts(run_id=run.info.run_id, artifact_path=f"{cfg.model.artifact_path}/{plot_path}", dst_path="results")
 
         df_train_dataset = mlflow.data.pandas_dataset.from_pandas(df=df_train, targets=cfg.data.target_cols[0])  # type: ignore
         df_test_dataset = mlflow.data.pandas_dataset.from_pandas(df=df_test, targets=cfg.data.target_cols[0])  # type: ignore
@@ -253,8 +253,8 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
 
                 estimator.fit(X_train_np, y_train_np)
 
-                plot_path = plot_and_log_metrics(estimator, f"loss_{cfg.model.model_name}_{index}", cfg.model.model_name)
-                mlflow.artifacts.download_artifacts(run_id=child_run.info.run_id, artifact_path=f"{cfg.model.model_name}/{plot_path}", dst_path="results")
+                plot_path = plot_and_log_metrics(estimator, f"loss_{cfg.model.model_name}_{index}", cfg.model.artifact_path)
+                mlflow.artifacts.download_artifacts(run_id=child_run.info.run_id, artifact_path=f"{cfg.model.artifact_path}/{plot_path}", dst_path="results")
                 
                 train_losses = estimator.history[:, "train_loss"]
                 valid_losses = estimator.history[:, "valid_loss"]
