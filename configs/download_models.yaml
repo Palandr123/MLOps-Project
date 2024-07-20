@@ -1,0 +1,8 @@
+model_name: staging
+aliases:
+  - champion
+  - challenger
+
+hydra:
+  run:
+    dir: .
