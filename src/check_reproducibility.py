@@ -70,10 +70,10 @@ def main(cfg: DictConfig):
             artifacts = client.list_artifacts(name="cat_transform")
             cat_transformer = artifacts[-1].load()
         
-        main_config.model.params.module__num_regions = [get_num_unique(cat_transformer, "region")]
-        main_config.model.params.module__num_wmis = [get_num_unique(cat_transformer, "WMI")]
-        main_config.model.params.module__num_vds = [get_num_unique(cat_transformer, "VDS")]
-        main_config.model.params.module__num_models = [get_num_unique(cat_transformer, "model")]
+            main_config.model.params.module__num_regions = [get_num_unique(cat_transformer, "region")]
+            main_config.model.params.module__num_wmis = [get_num_unique(cat_transformer, "WMI")]
+            main_config.model.params.module__num_vds = [get_num_unique(cat_transformer, "VDS")]
+            main_config.model.params.module__num_models = [get_num_unique(cat_transformer, "model")]
 
         # Train the model
         gs = train(X_train, y_train, cfg=main_config)
