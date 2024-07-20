@@ -1,6 +1,6 @@
 seeds: [1, 2, 3, 4, 5]
 results_dir: results
-model_config: resnet
+model_config: embedder_nn
 metrics_eval:
   mae:
     module_name: "sklearn.metrics"

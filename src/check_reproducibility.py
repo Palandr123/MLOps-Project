@@ -4,13 +4,15 @@ import importlib
 
 import numpy as np
 import torch
+import zenml
 import hydra
 from hydra import compose, initialize
 from hydra.core.global_hydra import GlobalHydra
 from omegaconf import DictConfig
 from omegaconf import open_dict
 
-from model import load_features, train
+from src.model import load_features, train
+from src.main import get_num_unique
 
 def evaluate_model(gs, X_test, y_test, metrics_eval):
     X_test_np = X_test.values.astype(np.float32)
@@ -54,6 +56,24 @@ def main(cfg: DictConfig):
 
         # Overwrite args.model.params.input_units with the number of features
         main_config.model.params.module__input_size = [X_train.shape[1]]
+        if main_config.model.has_embeds:
+            for i, col in enumerate(list(X_train.columns)):
+                if col == main_config.model.region_column:
+                    main_config.model.params.module__region_idx = [i]
+                elif col == main_config.model.wmi_column:
+                    main_config.model.params.module__wmi_idx = [i]
+                elif col == main_config.model.vds_column:
+                    main_config.model.params.module__vds_idx = [i]
+                elif col == main_config.model.model_column:
+                    main_config.model.params.module__model_idx = [i]
+            client = zenml.client.Client()
+            artifacts = client.list_artifacts(name="cat_transform")
+            cat_transformer = artifacts[-1].load()
+        
+        main_config.model.params.module__num_regions = [get_num_unique(cat_transformer, "region")]
+        main_config.model.params.module__num_wmis = [get_num_unique(cat_transformer, "WMI")]
+        main_config.model.params.module__num_vds = [get_num_unique(cat_transformer, "VDS")]
+        main_config.model.params.module__num_models = [get_num_unique(cat_transformer, "model")]
 
         # Train the model
         gs = train(X_train, y_train, cfg=main_config)
