@@ -1,0 +1,33 @@
+model_name: Embedder_NN
+artifact_path: embedder_nn_model
+
+tag_key: "model"
+tag_value: "Embedder NN"
+
+module_name: "src.nn"
+class_name: "SimpleNN"
+
+optimizer:
+  module_name: "torch.optim"
+  class_name: "Adam"
+
+has_embeds: True
+
+params:
+  module__input_size: [-1]  ### GETS OVERWRITTEN IN THE src/main.py
+  module__output_size: [1]  
+  module__hidden_units: [128]
+  module__num_blocks: [4]
+  module__embed_dim: [10, 20, 50]
+  module__num_regions: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__region_idx: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__num_wmis: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__wmi_idx: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__num_vds: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__vds_idx: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__num_models: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__model_idx: [-1] ### GETS OVERWRITTEN IN THE src/main.py
+  module__seed: [88]
+  max_epochs: [10, 20, 50]
+  optimizer__lr: [0.001]
+  optimizer__weight_decay: [1.0, 10.0, 100.0]

@@ -20,6 +20,9 @@ def load_features(name, version, size=1):
     artifacts = sorted(artifacts, key=lambda x: x.version, reverse=True)
 
     df = artifacts[0].load()
+    for column in df.columns:
+        if column.startswith("label__"):
+            df = df[df[column] != -1]
     df = df.sample(
         frac=size, random_state=88
     )  # Ensure reproducibility with a fixed random state

@@ -9,21 +9,17 @@ class SimpleNN(nn.Module):
     def __init__(
         self,
         input_size,
-        hidden_units1,
-        hidden_units2,
-        hidden_units3,
+        hidden_units,
+        num_blocks,
         output_size,
+        embed_dim,
         num_regions,
-        regions_embed_dim,
         region_idx,
         num_wmis,
-        wmis_embed_dim,
         wmi_idx,
         num_vds,
-        vds_embed_dim,
         vds_idx,
         num_models,
-        models_embed_dim,
         model_idx,
         seed,
     ):
@@ -31,31 +27,56 @@ class SimpleNN(nn.Module):
         np.random.seed(int(seed))
         torch.manual_seed(int(seed))
         super(SimpleNN, self).__init__()
-        self.embed_region = nn.Embedding(int(num_regions), int(regions_embed_dim))
-        self.embed_wmi = nn.Embedding(int(num_wmis), int(wmis_embed_dim))
-        self.embed_vds = nn.Embedding(int(num_vds), int(vds_embed_dim))
-        #self.embed_model = nn.Embedding(int(num_models), int(models_embed_dim))
-        self.hidden1 = nn.Linear(int(input_size)-3+int(regions_embed_dim)+int(wmis_embed_dim)+int(vds_embed_dim), int(hidden_units1))
-        self.hidden2 = nn.Linear(int(hidden_units1), int(hidden_units2))
-        self.hidden3 = nn.Linear(int(hidden_units2), int(hidden_units3))
-        self.relu = nn.ReLU()
-        self.output = nn.Linear(int(hidden_units3), int(output_size))
+        self.embed_region = nn.Embedding(int(num_regions), int(embed_dim))
+        self.embed_wmi = nn.Embedding(int(num_wmis), int(embed_dim))
+        self.embed_vds = nn.Embedding(int(num_vds), int(embed_dim))
+        self.embed_model = nn.Embedding(int(num_models), int(embed_dim))
+        num_units = int(input_size)-4+4*int(embed_dim)
+        modules = []
+        for i in range(int(num_blocks)):
+            if i == 0:
+                modules.append(nn.Sequential(nn.Linear(num_units, int(hidden_units)), nn.ReLU()))
+                num_units = int(hidden_units) 
+            elif i == int(num_blocks) - 1:
+                modules.append(nn.Linear(num_units, int(output_size)))
+            else:
+                modules.append(nn.Sequential(nn.Linear(num_units, num_units // 2), nn.ReLU()))
+                num_units = num_units // 2
+        self.linears = nn.Sequential(*modules)
         self.region_idx = int(region_idx)
         self.wmi_idx = int(wmi_idx)
         self.vds_idx = int(vds_idx)
-        #self.model_idx = int(model_idx)
+        self.model_idx = int(model_idx)
 
     def forward(self, x):
         mask = torch.ones(x.shape[1], dtype=torch.bool)
         mask[self.region_idx] = False
         mask[self.wmi_idx] = False
         mask[self.vds_idx] = False
-        #mask[self.model_idx] = False
+        mask[self.model_idx] = False
         region = self.embed_region(x[:, self.region_idx].int())
         wmi = self.embed_wmi(x[:, self.wmi_idx].int())
         vds = self.embed_vds(x[:, self.vds_idx].int())
+        model = self.embed_model(x[:, self.model_idx].int())
         x = x[:, mask]
-        x = self.hidden1(torch.cat([x, region, wmi, vds], dim=1))
+        x = self.linears(torch.cat([x, region, wmi, vds, model], dim=1))
+        return x
+    
+
+class MLP(nn.Module):
+    def __init__(self, input_size, hidden_units1, hidden_units2, hidden_units3, output_size, seed):
+        random.seed(int(seed))
+        np.random.seed(int(seed))
+        torch.manual_seed(int(seed))
+        super(MLP, self).__init__()
+        self.hidden1 = nn.Linear(int(input_size), int(hidden_units1))
+        self.hidden2 = nn.Linear(int(hidden_units1), int(hidden_units2))
+        self.hidden3 = nn.Linear(int(hidden_units2), int(hidden_units3))
+        self.relu = nn.ReLU()
+        self.output = nn.Linear(int(hidden_units3), int(output_size))
+
+    def forward(self, x):
+        x = self.hidden1(x)
         x = self.relu(x)
         x = self.hidden2(x)
         x = self.relu(x)

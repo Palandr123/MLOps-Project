@@ -11,6 +11,8 @@ optimizer:
   module_name: "torch.optim"
   class_name: "Adam"
 
+has_embeds: False
+
 params:
   module__input_size: [-1]  ### GETS OVERWRITTEN IN THE src/main.py
   module__output_size: [1]  

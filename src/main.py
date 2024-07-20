@@ -31,24 +31,25 @@ def run(args):
 
     # Overwrite args.model.params.input_units with the number of features
     cfg.model.params.module__input_size = [X_train.shape[1]]
-    for i, col in enumerate(list(X_train.columns)):
-        if col == cfg.model.region_column:
-            cfg.model.params.module__region_idx = [i]
-        elif col == cfg.model.wmi_column:
-            cfg.model.params.module__wmi_idx = [i]
-        elif col == cfg.model.vds_column:
-            cfg.model.params.module__vds_idx = [i]
-        elif col == cfg.model.model_column:
-            cfg.model.params.module__model_idx = [i]
-    client = zenml.client.Client()
-    artifacts = client.list_artifacts(name="cat_transform")
-    cat_transformer = artifacts[-1].load()
-    
-    cfg.model.params.module__num_regions = [get_num_unique(cat_transformer, "region")]
-    cfg.model.params.module__num_wmis = [get_num_unique(cat_transformer, "WMI")]
-    cfg.model.params.module__num_vds = [get_num_unique(cat_transformer, "VDS")]
-    cfg.model.params.module__num_models = [get_num_unique(cat_transformer, "model")]
-    print(get_num_unique(cat_transformer, "model"))
+
+    if cfg.model.has_embeds:
+        for i, col in enumerate(list(X_train.columns)):
+            if col == cfg.model.region_column:
+                cfg.model.params.module__region_idx = [i]
+            elif col == cfg.model.wmi_column:
+                cfg.model.params.module__wmi_idx = [i]
+            elif col == cfg.model.vds_column:
+                cfg.model.params.module__vds_idx = [i]
+            elif col == cfg.model.model_column:
+                cfg.model.params.module__model_idx = [i]
+        client = zenml.client.Client()
+        artifacts = client.list_artifacts(name="cat_transform")
+        cat_transformer = artifacts[-1].load()
+        
+        cfg.model.params.module__num_regions = [get_num_unique(cat_transformer, "region")]
+        cfg.model.params.module__num_wmis = [get_num_unique(cat_transformer, "WMI")]
+        cfg.model.params.module__num_vds = [get_num_unique(cat_transformer, "VDS")]
+        cfg.model.params.module__num_models = [get_num_unique(cat_transformer, "model")]
 
     gs = train(X_train, y_train, cfg=cfg)
 
