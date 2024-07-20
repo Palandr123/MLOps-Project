@@ -1,0 +1,5 @@
+model_name: "MLP"
+
+model_alias: "champion"
+
+data_version: "13"
