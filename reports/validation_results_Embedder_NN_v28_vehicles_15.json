@@ -1,0 +1,18 @@
+{
+    "EthicalBiasDetector": {},
+    "TextPerturbationDetector": {},
+    "PerformanceBiasDetector": {
+        "major": [
+            "For records in the dataset where `ohe__fuel_gas` == 0.000e+00, the MSE is 44.71% greater than the global MSE.",
+            "For records in the dataset where `label__WMI` == 113.000, the MSE is 43.15% greater than the global MSE.",
+            "For records in the dataset where `ohe__manufacturer_ford` == 1.000, the MSE is 21.43% greater than the global MSE.",
+            "For records in the dataset where `ohe__state_ca` == 1.000, the MSE is 13.79% greater than the global MSE.",
+            "For records in the dataset where `ohe__manufacturer_chevrolet` == 1.000, the MSE is 10.56% greater than the global MSE."
+        ],
+        "medium": [
+            "For records in the dataset where `ohe__transmission_automatic` == 0.000e+00, the MSE is 6.61% greater than the global MSE."
+        ]
+    },
+    "StochasticityDetector": {},
+    "DataLeakageDetector": {}
+}

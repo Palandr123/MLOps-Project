@@ -247,7 +247,7 @@ def validate_initial_data() -> bool:
     checkpoint_result = checkpoint.run()
     return checkpoint_result.success
 
-def read_datastore() -> tuple[pd.DataFrame, str]:
+def read_datastore(init_hydra=True) -> tuple[pd.DataFrame, str]:
     """
     Read sample and return in dataframe format to ZenML pipeline
 
@@ -256,7 +256,8 @@ def read_datastore() -> tuple[pd.DataFrame, str]:
         str: version number of sample
     """
     # Initialize Hydra with config path (replace with your config file)
-    initialize(config_path="../configs", version_base="1.1")
+    if init_hydra:
+        initialize(config_path="../configs", version_base="1.1")
     cfg = compose(config_name="sample_data")
     version_num = cfg.sample_num
 
@@ -264,7 +265,7 @@ def read_datastore() -> tuple[pd.DataFrame, str]:
     df = pd.read_csv(sample_path)
     return df, version_num
 
-def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def preprocess_data(df: pd.DataFrame, drop_rows=True, return_y=True) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Preprocess data step in ZenML pipeline
 
@@ -277,17 +278,20 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     labels = cfg.data.target_cols
 
-    df = df[(df[labels[0]] >= cfg.data.target_low) & (df[labels[0]] <= cfg.data.target_high)]
-    df = df.dropna(subset=cfg.data.drop_rows)
-    df = df.reset_index(drop=True)
+    if drop_rows:
+        df = df[(df[labels[0]] >= cfg.data.target_low) & (df[labels[0]] <= cfg.data.target_high)]
+        df = df.dropna(subset=cfg.data.drop_rows)
+        df = df.reset_index(drop=True)
     X_cols = [col for col in df.columns if col not in labels]
     X = df[X_cols]
-    y = df[labels]
+    
+    if return_y:
+        y = df[labels]
 
     for dt_feature in list(cfg.data.dt_feature):
         X[dt_feature] = pd.to_datetime(X[dt_feature])
         X[dt_feature] = X[dt_feature].apply(lambda x: np.nan if x is pd.NaT else x.timestamp())
-    
+
     X["WMI"] = X["VIN"].apply(lambda x: x[:3])
     X["VDS"] = X["VIN"].apply(lambda x: x[3:8])
 
@@ -350,7 +354,9 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     X = X.drop(cfg.data.drop_cols, axis=1)
 
     X = X.loc[:, ~X.columns.duplicated()].copy()
-    return X, y
+    if return_y:
+        return X, y
+    return X
 
 def validate_features(X: pd.DataFrame, y: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
