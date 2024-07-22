@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import hydra
 from omegaconf import DictConfig
+import giskard
+
 from src.model import load_features
 
 

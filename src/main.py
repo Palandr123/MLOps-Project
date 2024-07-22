@@ -4,6 +4,7 @@ import hydra
 import numpy as np
 import torch
 import zenml
+import giskard
 
 from model import load_features, train, log_metadata
 
