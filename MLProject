@@ -22,3 +22,6 @@ entry_points:
 
   extract:
     command: "python src/extract.py"
+
+  deploy:
+    command: "bash scripts/deploy_docker.sh"
