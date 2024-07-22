@@ -187,6 +187,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
             input_example=X_train.iloc[0].to_numpy(),
             registered_model_name=cfg.model.model_name,
             pyfunc_predict_fn=cfg.model.pyfunc_predict_fn,
+            code_paths=['src'],
         )
 
         client = mlflow.client.MlflowClient()
@@ -275,6 +276,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                     input_example=X_train.iloc[0].to_numpy(),
                     registered_model_name=cfg.model.model_name,
                     pyfunc_predict_fn=cfg.model.pyfunc_predict_fn,
+                    code_paths=['src'],
                 )
 
                 model_uri = model_info.model_uri
