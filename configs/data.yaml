@@ -1,10 +1,14 @@
 data:
+  dataset_name: "vehicles"
+
   target_cols:
     - "price"
 
   target_low: 1000
 
   target_high: 40000
+
+  categorical_cols: ["title_status", "transmission", "fuel", "state", "manufacturer", "model", "region"]
 
   impute_most_frequent: ["manufacturer", "model", "fuel", "title_status", "transmission", "state"]
 
