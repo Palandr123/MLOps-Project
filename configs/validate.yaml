@@ -5,9 +5,9 @@ models:
 # How many latest model versions consider as challengers
 n_versions: 2
 
-data_version: "15"
+data_version: "51"
 
 model:
-  r2_threshold: 0.85
+  r2_threshold: 0.8
 
   mae_threshold: 3000
