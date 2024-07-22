@@ -31,7 +31,7 @@ skorch = "^1.0.0"
 
 
 jq = "^1.7.0"
-giskard = "2.14.0"
+giskard = "^2.14.2"
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.4"
 

@@ -1,7 +1,6 @@
 import os
 import shutil
 
-import giskard.testing
 import mlflow
 import numpy as np
 import pandas as pd
@@ -11,6 +10,7 @@ from src.model import load_features
 from src.data import read_datastore, preprocess_data
 from collections.abc import Generator
 import giskard
+import giskard.testing
 import yaml
 import json
 
