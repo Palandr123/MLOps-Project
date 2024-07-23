@@ -7,9 +7,10 @@ import numpy as np
 import pandas as pd
 from zenml.client import Client
 import torch
-from skorch.regressor import NeuralNetRegressor
 from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
+
+from nn import NNWrapper
 
 
 def load_features(name, version, size=1):
@@ -59,7 +60,7 @@ def train(X_train, y_train, cfg):
         cfg.model.optimizer.class_name,
     )
 
-    estimator = NeuralNetRegressor(module=class_instance, optimizer=optimizer)
+    estimator = NNWrapper(module=class_instance, optimizer=optimizer)
 
     param_grid = dict(params)
 
@@ -77,11 +78,7 @@ def train(X_train, y_train, cfg):
         return_train_score=True,
     )
 
-    # Ensure tensors are created consistently
-    X_train_np = X_train.values.astype(np.float32)
-    y_train_np = y_train.values.astype(np.float32).reshape(-1, 1)
-
-    gs.fit(X_train_np, y_train_np)
+    gs.fit(X_train, y_train)
 
     return gs
 
@@ -174,10 +171,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
         mlflow.set_tag(cfg.model.tag_key, cfg.model.tag_value)
 
         # Infer the model signature
-        X_train_np = X_train.values.astype(np.float32)
-        y_train_np = y_train.values.astype(np.float32).reshape(-1, 1)
-        X_test_np = X_test.values.astype(np.float32)
-        signature = mlflow.models.infer_signature(X_train, gs.predict(X_train_np))
+        signature = mlflow.models.infer_signature(X_train, gs.predict(X_train))
 
         # Log the model
         model_info = mlflow.sklearn.log_model(
@@ -199,7 +193,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
         )
 
         # Evaluate the best model
-        predictions = gs.best_estimator_.predict(X_test_np)  # type: ignore
+        predictions = gs.best_estimator_.predict(X_test)  # type: ignore
         eval_data = pd.DataFrame(y_test)
         eval_data.columns = ["label"]
         eval_data["predictions"] = predictions
@@ -248,11 +242,11 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                     importlib.import_module(cfg.model.optimizer.module_name),
                     cfg.model.optimizer.class_name,
                 )
-                estimator = NeuralNetRegressor(
+                estimator = NNWrapper(
                     module=class_instance, optimizer=optimizer, **ps
                 )
 
-                estimator.fit(X_train_np, y_train_np)
+                estimator.fit(X_train, y_train)
 
                 plot_path = plot_and_log_metrics(estimator, f"loss_{cfg.model.model_name}_{index}", cfg.model.artifact_path)
                 mlflow.artifacts.download_artifacts(run_id=child_run.info.run_id, artifact_path=f"{cfg.model.artifact_path}/{plot_path}", dst_path="results")
@@ -266,7 +260,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                     mlflow.log_metric("valid_loss", valid_loss, step=idx)
 
                 signature = mlflow.models.infer_signature(
-                    X_train, estimator.predict(X_train_np)
+                    X_train, estimator.predict(X_train)
                 )
 
                 model_info = mlflow.sklearn.log_model(
@@ -282,7 +276,7 @@ def log_metadata(cfg, gs, X_train, y_train, X_test, y_test):
                 model_uri = model_info.model_uri
                 loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
 
-                predictions = loaded_model.predict(X_test_np)  # type: ignore
+                predictions = loaded_model.predict(X_test)  # type: ignore
 
                 eval_data = pd.DataFrame(y_test)
                 eval_data.columns = ["label"]

@@ -13,8 +13,6 @@ from src.model import load_features
 
 def evaluate(data_version, model_name, model_alias = "champion") -> None:
     X, y = load_features(name="features_target", version=data_version)
-    X = X.values.astype(np.float32)
-    y = y.values.astype(np.float32).reshape(-1, 1)
 
     model_uri = f"models:/{model_name}@{model_alias}"
     loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)

@@ -5,6 +5,7 @@ defaults:
   - model/model
   - experiment
   - data
+  - api
 
 hydra:
   mode: MULTIRUN

@@ -25,3 +25,20 @@ entry_points:
 
   deploy:
     command: "bash scripts/deploy_docker.sh"
+
+  predict:
+    parameters:
+      example_version: 
+        type: string
+        default: "51"
+      hostname:
+        type: string
+        default: "localhost"
+      port:
+        type: float
+        default: 5152
+      random_state:
+        type: float
+        default: 1
+
+    command: "python src/predict.py ++example_version={example_version} ++hostname={hostname} ++port={port} ++random_state={random_state}"

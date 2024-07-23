@@ -1,14 +1,14 @@
 failed_models:
-- Embedder_NN_model_ver:
-  - Embedder_NN
-  - 144
-- Embedder_NN_model_ver:
-  - Embedder_NN
-  - 143
 - MLP_model_ver:
   - MLP
-  - 750
+  - 168
 - MLP_model_ver:
   - MLP
-  - 749
-succeded_models: []
+  - 167
+succeded_models:
+- Embedder_NN_model_ver:
+  - Embedder_NN
+  - 168
+- Embedder_NN_model_ver:
+  - Embedder_NN
+  - 167

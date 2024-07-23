@@ -1,8 +1,10 @@
 import random
 import numpy as np
+import pandas as pd
 
 import torch
 from torch import nn
+from skorch import NeuralNetRegressor
 
 
 class SimpleNN(nn.Module):
@@ -127,3 +129,31 @@ class ResNetBlock(nn.Module):
         x += residual
         x = self.relu(x)
         return x
+    
+class NNWrapper(NeuralNetRegressor):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __prepare_features(self, X):
+        if isinstance(X, pd.DataFrame):
+            return X.values.astype(np.float32)
+        return X
+    
+    def __prepare_targets(self, y):
+        if isinstance(y, pd.Series):
+            return y.values.astype(np.float32).reshape(-1, 1)
+        return y
+    
+    def fit(self, X, y, **kwargs):
+        X = self.__prepare_features(X)
+        y = self.__prepare_targets(y)
+        return super().fit(X, y, **kwargs)
+    
+    def predict(self, X):
+        X = self.__prepare_features(X)
+        return super().predict(X)
+    
+    def score(self, X, y):
+        X = self.__prepare_features(X)
+        y = self.__prepare_targets(y)
+        return super().score(X, y)

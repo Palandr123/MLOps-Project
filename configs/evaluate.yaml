@@ -1,5 +1,5 @@
-model_name: "staging"
+model_name: "Embedder_NN"
 
 model_alias: "champion"
 
-data_version: "19"
+data_version: "51"

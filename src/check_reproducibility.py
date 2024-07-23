@@ -15,15 +15,13 @@ from src.model import load_features, train
 from src.main import get_num_unique
 
 def evaluate_model(gs, X_test, y_test, metrics_eval):
-    X_test_np = X_test.values.astype(np.float32)
-    y_test_np = y_test.values.astype(np.float32).reshape(-1, 1)
-    predictions = gs.best_estimator_.predict(X_test_np)
+    predictions = gs.best_estimator_.predict(X_test)
     metrics = {}
     for metric_name, metric in metrics_eval.items():
         class_instance = getattr(
             importlib.import_module(metric.module_name), metric.class_name
         )
-        metrics[metric_name] = class_instance(y_test_np, predictions)
+        metrics[metric_name] = class_instance(y_test, predictions)
     
     return metrics
 
