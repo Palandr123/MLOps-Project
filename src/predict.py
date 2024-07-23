@@ -14,8 +14,6 @@ def predict(cfg = None):
                         version = cfg.example_version, 
                         )
 
-    print(X.shape)
-    print(y.shape)
     random.seed(cfg.random_state)
     idx = random.randint(0, y.shape[0] - 1)
     example = X.iloc[idx,:]
@@ -24,7 +22,6 @@ def predict(cfg = None):
     example = json.dumps(   
         {"inputs" : example.to_dict()}
     )
-    print(example)
 
     response = requests.post(
         url=f"http://localhost:{cfg.port}/invocations",
