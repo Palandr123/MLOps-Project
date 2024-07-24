@@ -1,0 +1,126 @@
+artifact_path: embedder_nn_model
+flavors:
+  python_function:
+    code: code
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.9
+  sklearn:
+    code: code
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.0
+mlflow_version: 2.14.3
+model_size_bytes: 18487783
+model_uuid: 99a58a51231a476cb25673ba12e454d0
+run_id: 0fb10f7ba28b4469970fafb3324d6b0e
+saved_input_example_info:
+  artifact_path: input_example.json
+  format: tf-serving
+  type: ndarray
+signature:
+  inputs: '[{"type": "double", "name": "year", "required": true}, {"type": "double",
+    "name": "odometer", "required": true}, {"type": "double", "name": "ohe__title_status_clean",
+    "required": true}, {"type": "double", "name": "ohe__title_status_lien", "required":
+    true}, {"type": "double", "name": "ohe__title_status_missing", "required": true},
+    {"type": "double", "name": "ohe__title_status_parts only", "required": true},
+    {"type": "double", "name": "ohe__title_status_rebuilt", "required": true}, {"type":
+    "double", "name": "ohe__title_status_salvage", "required": true}, {"type": "double",
+    "name": "ohe__transmission_automatic", "required": true}, {"type": "double", "name":
+    "ohe__transmission_manual", "required": true}, {"type": "double", "name": "ohe__transmission_other",
+    "required": true}, {"type": "double", "name": "ohe__fuel_diesel", "required":
+    true}, {"type": "double", "name": "ohe__fuel_electric", "required": true}, {"type":
+    "double", "name": "ohe__fuel_gas", "required": true}, {"type": "double", "name":
+    "ohe__fuel_hybrid", "required": true}, {"type": "double", "name": "ohe__fuel_other",
+    "required": true}, {"type": "double", "name": "ohe__state_ak", "required": true},
+    {"type": "double", "name": "ohe__state_al", "required": true}, {"type": "double",
+    "name": "ohe__state_ar", "required": true}, {"type": "double", "name": "ohe__state_az",
+    "required": true}, {"type": "double", "name": "ohe__state_ca", "required": true},
+    {"type": "double", "name": "ohe__state_co", "required": true}, {"type": "double",
+    "name": "ohe__state_ct", "required": true}, {"type": "double", "name": "ohe__state_dc",
+    "required": true}, {"type": "double", "name": "ohe__state_de", "required": true},
+    {"type": "double", "name": "ohe__state_fl", "required": true}, {"type": "double",
+    "name": "ohe__state_ga", "required": true}, {"type": "double", "name": "ohe__state_hi",
+    "required": true}, {"type": "double", "name": "ohe__state_ia", "required": true},
+    {"type": "double", "name": "ohe__state_id", "required": true}, {"type": "double",
+    "name": "ohe__state_il", "required": true}, {"type": "double", "name": "ohe__state_in",
+    "required": true}, {"type": "double", "name": "ohe__state_ks", "required": true},
+    {"type": "double", "name": "ohe__state_ky", "required": true}, {"type": "double",
+    "name": "ohe__state_la", "required": true}, {"type": "double", "name": "ohe__state_ma",
+    "required": true}, {"type": "double", "name": "ohe__state_md", "required": true},
+    {"type": "double", "name": "ohe__state_me", "required": true}, {"type": "double",
+    "name": "ohe__state_mi", "required": true}, {"type": "double", "name": "ohe__state_mn",
+    "required": true}, {"type": "double", "name": "ohe__state_mo", "required": true},
+    {"type": "double", "name": "ohe__state_ms", "required": true}, {"type": "double",
+    "name": "ohe__state_mt", "required": true}, {"type": "double", "name": "ohe__state_nc",
+    "required": true}, {"type": "double", "name": "ohe__state_nd", "required": true},
+    {"type": "double", "name": "ohe__state_ne", "required": true}, {"type": "double",
+    "name": "ohe__state_nh", "required": true}, {"type": "double", "name": "ohe__state_nj",
+    "required": true}, {"type": "double", "name": "ohe__state_nm", "required": true},
+    {"type": "double", "name": "ohe__state_nv", "required": true}, {"type": "double",
+    "name": "ohe__state_ny", "required": true}, {"type": "double", "name": "ohe__state_oh",
+    "required": true}, {"type": "double", "name": "ohe__state_ok", "required": true},
+    {"type": "double", "name": "ohe__state_or", "required": true}, {"type": "double",
+    "name": "ohe__state_pa", "required": true}, {"type": "double", "name": "ohe__state_ri",
+    "required": true}, {"type": "double", "name": "ohe__state_sc", "required": true},
+    {"type": "double", "name": "ohe__state_sd", "required": true}, {"type": "double",
+    "name": "ohe__state_tn", "required": true}, {"type": "double", "name": "ohe__state_tx",
+    "required": true}, {"type": "double", "name": "ohe__state_ut", "required": true},
+    {"type": "double", "name": "ohe__state_va", "required": true}, {"type": "double",
+    "name": "ohe__state_vt", "required": true}, {"type": "double", "name": "ohe__state_wa",
+    "required": true}, {"type": "double", "name": "ohe__state_wi", "required": true},
+    {"type": "double", "name": "ohe__state_wv", "required": true}, {"type": "double",
+    "name": "ohe__state_wy", "required": true}, {"type": "double", "name": "ohe__manufacturer_acura",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_alfa-romeo",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_aston-martin",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_audi", "required":
+    true}, {"type": "double", "name": "ohe__manufacturer_bmw", "required": true},
+    {"type": "double", "name": "ohe__manufacturer_buick", "required": true}, {"type":
+    "double", "name": "ohe__manufacturer_cadillac", "required": true}, {"type": "double",
+    "name": "ohe__manufacturer_chevrolet", "required": true}, {"type": "double", "name":
+    "ohe__manufacturer_chrysler", "required": true}, {"type": "double", "name": "ohe__manufacturer_datsun",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_dodge", "required":
+    true}, {"type": "double", "name": "ohe__manufacturer_ferrari", "required": true},
+    {"type": "double", "name": "ohe__manufacturer_fiat", "required": true}, {"type":
+    "double", "name": "ohe__manufacturer_ford", "required": true}, {"type": "double",
+    "name": "ohe__manufacturer_gmc", "required": true}, {"type": "double", "name":
+    "ohe__manufacturer_harley-davidson", "required": true}, {"type": "double", "name":
+    "ohe__manufacturer_honda", "required": true}, {"type": "double", "name": "ohe__manufacturer_hyundai",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_infiniti", "required":
+    true}, {"type": "double", "name": "ohe__manufacturer_jaguar", "required": true},
+    {"type": "double", "name": "ohe__manufacturer_jeep", "required": true}, {"type":
+    "double", "name": "ohe__manufacturer_kia", "required": true}, {"type": "double",
+    "name": "ohe__manufacturer_land rover", "required": true}, {"type": "double",
+    "name": "ohe__manufacturer_lexus", "required": true}, {"type": "double", "name":
+    "ohe__manufacturer_lincoln", "required": true}, {"type": "double", "name": "ohe__manufacturer_mazda",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_mercedes-benz",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_mercury", "required":
+    true}, {"type": "double", "name": "ohe__manufacturer_mini", "required": true},
+    {"type": "double", "name": "ohe__manufacturer_mitsubishi", "required": true},
+    {"type": "double", "name": "ohe__manufacturer_nissan", "required": true}, {"type":
+    "double", "name": "ohe__manufacturer_pontiac", "required": true}, {"type": "double",
+    "name": "ohe__manufacturer_porsche", "required": true}, {"type": "double", "name":
+    "ohe__manufacturer_ram", "required": true}, {"type": "double", "name": "ohe__manufacturer_rover",
+    "required": true}, {"type": "double", "name": "ohe__manufacturer_saturn", "required":
+    true}, {"type": "double", "name": "ohe__manufacturer_subaru", "required": true},
+    {"type": "double", "name": "ohe__manufacturer_tesla", "required": true}, {"type":
+    "double", "name": "ohe__manufacturer_toyota", "required": true}, {"type": "double",
+    "name": "ohe__manufacturer_volkswagen", "required": true}, {"type": "double",
+    "name": "ohe__manufacturer_volvo", "required": true}, {"type": "double", "name":
+    "label__WMI", "required": true}, {"type": "double", "name": "label__VDS", "required":
+    true}, {"type": "double", "name": "label__model", "required": true}, {"type":
+    "double", "name": "label__region", "required": true}, {"type": "double", "name":
+    "lat_sin", "required": true}, {"type": "double", "name": "lat_cos", "required":
+    true}, {"type": "double", "name": "long_sin", "required": true}, {"type": "double",
+    "name": "long_cos", "required": true}, {"type": "double", "name": "posting_date_month_sin",
+    "required": true}, {"type": "double", "name": "posting_date_month_cos", "required":
+    true}, {"type": "double", "name": "posting_date_day_sin", "required": true}, {"type":
+    "double", "name": "posting_date_day_cos", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1,
+    1]}}]'
+  params: null
+utc_time_created: '2024-07-24 20:21:45.124232'
