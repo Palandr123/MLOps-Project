@@ -1,0 +1,4 @@
+region,year,manufacturer,model,condition,cylinders,fuel,odometer,title_status,transmission,VIN,state,lat,long,posting_date
+auburn,2020,lexus,nx 300 sport utility 4d,good,,gas,1722,clean,other,JTJAARBZ1L2159357,al,32.59,-85.48,2021-04-22T08:51:28-0500
+auburn,2004,chrysler,town & country,good,6 cylinders,gas,176144,clean,automatic,,al,32.629409,-85.484447,2021-04-21T19:26:56-0500
+auburn,2016,volvo,s60 t5 cross country,good,,gas,42755,clean,other,YV4612UMXG2000759,al,32.59,-85.48,2021-04-21T11:30:50-0500
