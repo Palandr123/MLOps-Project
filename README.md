@@ -1,4 +1,5 @@
 # MLOps-Project
+![Test code workflow](https://github.com/Palandr123/MLOps-Project/actions/workflows/test-code.yaml/badge.svg)
 
 ## Repository structure
 ```
