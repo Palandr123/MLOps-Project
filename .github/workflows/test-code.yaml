@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'services/airflow/dags/**'
+      - 'tests/**'
+      - 'configs/**'
+      - '.github/**'
 
 permissions:
   contents: read
