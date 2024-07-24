@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1866129b52754f87be9a47752e8e29ff/artifacts
+end_time: 1721848064580
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1866129b52754f87be9a47752e8e29ff
+run_name: wistful-crow-104
+run_uuid: 1866129b52754f87be9a47752e8e29ff
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721848059154
+status: 4
+tags: []
+user_id: andrey

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/201590258151074382/597c617c3e4c45ec804596abcba3ae04/artifacts
+end_time: 1721851183593
+entry_point_name: ''
+experiment_id: '201590258151074382'
+lifecycle_stage: active
+run_id: 597c617c3e4c45ec804596abcba3ae04
+run_name: child_multi_run_Embedder_NN_neg_mean_absolute_error_-1828_0996316278604_4
+run_uuid: 597c617c3e4c45ec804596abcba3ae04
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721851154950
+status: 3
+tags: []
+user_id: andrey

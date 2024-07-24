@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1721851153950
+current_stage: None
+description: ''
+last_updated_timestamp: 1721851153950
+name: Embedder_NN
+run_id: da65b64460db45edb8d93979986b348d
+run_link: ''
+source: mlflow-artifacts:/201590258151074382/da65b64460db45edb8d93979986b348d/artifacts/embedder_nn_model
+status: READY
+status_message: null
+storage_location: mlflow-artifacts:/201590258151074382/da65b64460db45edb8d93979986b348d/artifacts/embedder_nn_model
+user_id: null
+version: 5

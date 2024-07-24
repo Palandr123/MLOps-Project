@@ -1,0 +1,6 @@
+artifact_location: mlflow-artifacts:/201590258151074382
+creation_time: 1721851036811
+experiment_id: '201590258151074382'
+last_update_time: 1721851036811
+lifecycle_stage: active
+name: Embedder_NN_initial_experiment

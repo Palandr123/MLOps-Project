@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1f22ad98f3da47488ebece53571584a7/artifacts
+end_time: 1721848711179
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1f22ad98f3da47488ebece53571584a7
+run_name: enchanting-auk-725
+run_uuid: 1f22ad98f3da47488ebece53571584a7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721848155305
+status: 4
+tags: []
+user_id: andrey

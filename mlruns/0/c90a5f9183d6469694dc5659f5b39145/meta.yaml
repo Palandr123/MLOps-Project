@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/c90a5f9183d6469694dc5659f5b39145/artifacts
+end_time: 1721852763459
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c90a5f9183d6469694dc5659f5b39145
+run_name: likeable-flea-14
+run_uuid: c90a5f9183d6469694dc5659f5b39145
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721849833620
+status: 3
+tags: []
+user_id: andrey
