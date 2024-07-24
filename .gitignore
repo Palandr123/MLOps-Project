@@ -169,5 +169,3 @@ airflow.cfg
 airflow.db
 pipelines
 .hydra
-multirun
-mlruns

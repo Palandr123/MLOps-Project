@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 from nn import NNWrapper
 
 
+mlflow.set_tracking_uri(uri="http://localhost:5000")
+
+
 def load_features(name, version, size=1):
     client = Client()
 

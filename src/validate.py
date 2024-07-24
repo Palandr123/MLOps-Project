@@ -15,6 +15,9 @@ import yaml
 import json
 
 
+mlflow.set_tracking_uri(uri="http://localhost:5000")
+
+
 def clear_tags_and_aliases(client: mlflow.client.MlflowClient, models: list[str]) -> None:
     for model in models:
         for mv in client.search_model_versions(f"name='{model}'"):
@@ -30,7 +33,7 @@ def set_challengers(client: mlflow.client.MlflowClient, models: list[str], n_ver
     for model in models:
         model_metadata = client.get_latest_versions(model, stages=["None"])
         latest_model_version = model_metadata[0].version
-        for i in range(latest_model_version - n_versions + 1, latest_model_version + 1):
+        for i in range(int(latest_model_version) - n_versions + 1, int(latest_model_version) + 1):
             client.set_registered_model_alias(model, f"challenger{challenger_num}", str(i))
             client.set_model_version_tag(model, str(i), key="challenger", value=True)
             challenger_num += 1
@@ -98,8 +101,8 @@ def choose_champion(client: mlflow.client.MlflowClient, dataset_name: str, datas
 def main(cfg: DictConfig):
     client = mlflow.client.MlflowClient()
     
-    clear_tags_and_aliases(client, cfg.models)
-    set_challengers(client, cfg.models, cfg.n_versions)
+    # clear_tags_and_aliases(client, cfg.models)
+    # set_challengers(client, cfg.models, cfg.n_versions)
     succeded_models = []
     failed_models = []
     for model, model_ver, model_name in get_challengers(client, cfg.models):

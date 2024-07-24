@@ -11,6 +11,9 @@ import giskard
 from src.model import load_features
 
 
+mlflow.set_tracking_uri(uri="http://localhost:5000")
+
+
 def evaluate(data_version, model_name, model_alias = "champion") -> None:
     X, y = load_features(name="features_target", version=data_version)
 

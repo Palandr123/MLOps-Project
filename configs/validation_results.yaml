@@ -1,14 +1,5 @@
-failed_models:
-- MLP_model_ver:
-  - MLP
-  - 168
-- MLP_model_ver:
-  - MLP
-  - 167
+failed_models: []
 succeded_models:
 - Embedder_NN_model_ver:
   - Embedder_NN
-  - 168
-- Embedder_NN_model_ver:
-  - Embedder_NN
-  - 167
+  - '28'
