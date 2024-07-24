@@ -63,7 +63,7 @@ jobs:
 
       - name: Pull DVC data
         run: |
-          poetry run dvc fetch -vv
+          poetry run dvc doctor
           poetry run dvc pull -vv
         
       
