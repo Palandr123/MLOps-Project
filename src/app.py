@@ -85,7 +85,7 @@ def predict(region = None,
     
     # Convert it into JSON
     example = X.iloc[0,:]
-    
+
     example = json.dumps( 
         { "inputs": example.to_dict() }
     )
@@ -94,8 +94,9 @@ def predict(region = None,
 
     # Send POST request with the payload to the deployed Model API
     # Here you can pass the port number at runtime using Hydra
+    port_number = 5000
     response = requests.post(
-        url=f"http://localhost:{port_number}/invocations",
+        url=f"http://localhost:{port_number}/predict",
         data=payload,
         headers={"Content-Type": "application/json"},
     )
