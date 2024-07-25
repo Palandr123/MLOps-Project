@@ -1,8 +1,0 @@
-digest: 4581420d
-name: dataset
-profile: '{"num_rows": 42765, "num_elements": 85530}'
-schema: '{"mlflow_colspec": [{"type": "long", "name": "label", "required": true},
-  {"type": "float", "name": "predictions", "required": true}]}'
-source: '{"tags": {"mlflow.user": "andrey", "mlflow.source.name": "/home/andrey/MLOps-Project/src/evaluate.py",
-  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "d570338ccced2f5e579683747bb994f4c81fc0ce"}}'
-source_type: code
