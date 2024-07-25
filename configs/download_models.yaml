@@ -1,8 +1,7 @@
-model_name: Embedder_NN
+model_name: staging
 aliases:
   - champion
-  - challenger1
-  - challenger2
+  - challenger
 
 hydra:
   run:

@@ -4,9 +4,6 @@ import mlflow
 import hydra
 
 
-mlflow.set_tracking_uri(uri="http://localhost:5000")
-
-
 def retrieve_model_with_alias(model_name, model_alias = "champion") -> mlflow.pyfunc.PyFuncModel:
 
     best_model:mlflow.pyfunc.PyFuncModel = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}@{model_alias}")
