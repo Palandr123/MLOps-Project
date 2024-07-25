@@ -50,7 +50,7 @@ jobs:
         # Install Python packages  
       - name: install python packages
         run: |
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction
 
 
       - name: Store Gdrive credentials
@@ -63,7 +63,7 @@ jobs:
 
       - name: Pull DVC data
         run: |
-          poetry run dvc pull -vv
+          poetry run dvc pull
         
       
       - name: Export variables
@@ -77,8 +77,16 @@ jobs:
 
       - name: Run ZenML server  
         run: poetry run zenml down && poetry run zenml up
+
+      - name: Run MLFlow server
+        run: |
+          poetry run mlflow server -p 5000 &
+          sleep 5
         
       # Run model validation   
       - name: Test champion with Giscard
         run: |
-          poetry run python3.11 src/validate.py
+          #source $(poetry env info --path)/bin/activate 
+          #which python3.11
+          #PYTHONPATH=$PWD/src python3.11 src/validate.py
+          poetry run python src/validate.py

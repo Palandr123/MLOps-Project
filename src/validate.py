@@ -97,8 +97,9 @@ def choose_champion(client: mlflow.client.MlflowClient, dataset_name: str, datas
         client.set_registered_model_alias(best_model_info[0], "champion", best_model_info[1])
         print(f"Marked {best_model_info[0]}_v{best_model_info[1]} as a champion")
 
-@hydra.main(config_path="../configs", config_name="validate", version_base=None)
-def main(cfg: DictConfig):
+def main():
+    hydra.initialize(config_path="../configs", version_base=None)
+    cfg = hydra.compose(config_name="validate")
     client = mlflow.client.MlflowClient()
     
     # clear_tags_and_aliases(client, cfg.models)
