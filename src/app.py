@@ -94,7 +94,7 @@ def predict(region = None,
 
     # Send POST request with the payload to the deployed Model API
     # Here you can pass the port number at runtime using Hydra
-    port_number = 5000
+    port_number = 5001
     response = requests.post(
         url=f"http://localhost:{port_number}/predict",
         data=payload,
