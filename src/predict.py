@@ -24,7 +24,7 @@ def predict(cfg = None):
     )
 
     response = requests.post(
-        url=f"http://localhost:{cfg.port}/invocations",
+        url=f"http://localhost:{cfg.port}/predict",
         data=example,
         headers={"Content-Type": "application/json"},
     )       
