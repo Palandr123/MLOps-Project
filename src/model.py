@@ -45,6 +45,7 @@ def load_features(name, version, size=1):
 
 
 def train(X_train, y_train, cfg):
+    # fix seeds
     random.seed(cfg.random_state)
     np.random.seed(cfg.random_state)
     torch.manual_seed(cfg.random_state)
