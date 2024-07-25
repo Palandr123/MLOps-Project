@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/706881763756567559/171c3ea46f264fbb88458fa828ce0461/artifacts
+end_time: 1721929743294
+entry_point_name: ''
+experiment_id: '706881763756567559'
+lifecycle_stage: active
+run_id: 171c3ea46f264fbb88458fa828ce0461
+run_name: Embedder_NN_challenger2_19_eval
+run_uuid: 171c3ea46f264fbb88458fa828ce0461
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721929738673
+status: 3
+tags: []
+user_id: andrey

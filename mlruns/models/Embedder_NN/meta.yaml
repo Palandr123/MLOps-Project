@@ -1,6 +1,8 @@
 aliases:
+  challenger1: '28'
+  challenger2: '25'
   champion: '28'
 creation_timestamp: 1721851052205
 description: ''
-last_updated_timestamp: 1721856537740
+last_updated_timestamp: 1721929620559
 name: Embedder_NN
